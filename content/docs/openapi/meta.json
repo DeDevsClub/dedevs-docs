@@ -1,6 +1,6 @@
 {
     "title": "OpenAPI",
-    "description": "Retrieves Morpho programs.",
+    "description": "Morpho API.",
     "root": true,
     "icon": "Rocket",
     "_openapi": {
@@ -11,7 +11,7 @@
         "headings": [],
         "contents": [
           {
-            "content": "Retrieves Morpho programs."
+            "content": "Morpho API documentation."
           }
         ]
       }
