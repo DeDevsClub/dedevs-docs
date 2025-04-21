@@ -1,86 +1,63 @@
-import Link from "next/link";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import HeroSection from "@/components/hero-section";
-import Button from "@/components/button";
+'use client'
 
-export const metadata = {
-  title: "DeDevs | Docs",
-  description:
-    "Explore DeDevs documentation for components and OpenAPI specifications.",
+import { Icon } from "@iconify/react";
+import Bento from "@/components/bento";
+
+const HomePage = () => {
+  const items = [
+
+    {
+      title: "Documentation",
+      // meta: "1+ contributors",
+      description: "Visit the documentation to learn how to use the project.",
+      icon: <Icon icon="mdi:book" className="w-6 h-6 text-sky-500" />,
+      // status: "Beta",
+      tags: ["Documentation"],
+      cta: "/docs/components/cards",
+      ctaText: "Components",
+      external: false,
+    },
+    {
+      title: "OpenAPI",
+      // meta: "1+ contributors",
+      description: "Visit the OpenAPI documentation to interact with the API.",
+      icon: <Icon icon="mdi:api" className="w-6 h-6 text-sky-500" />,
+      // status: "Beta",
+      tags: ["OpenAPI", "Documentation"],
+      cta: "/docs/openapi/defillama/tvl/chains",
+      ctaText: "OpenAPI",
+      external: false,
+    },
+    {
+      title: "GitHub Repository",
+      // meta: "1+ contributors",
+      description: "Visit the GitHub repository to contribute to the project.",
+      icon: <Icon icon="mdi:github" className="w-6 h-6 text-sky-500" />,
+      // status: "Beta",
+      tags: ["Repository", "GitHub", "Contribution"],
+      cta: "https://github.com/DeDevsClub/create-dedevs-app",
+      ctaText: "Fork",
+      external: true,
+    },
+    {
+      title: "YouTube Tutorial",
+      // meta: "1+ contributors",
+      description: "Watch the YouTube tutorial to learn how to use the project.",
+      icon: <Icon icon="mdi:youtube" className="w-6 h-6 text-sky-500" />,
+      // status: "Beta",
+      tags: ["Tutorials", "YouTube", "Contribution"],
+      cta: "https://www.youtube.com/watch?v=VPjBpPp63qM",
+      ctaText: "YouTube",
+      external: true,
+    },
+  ]
+  return (
+    <main
+    className="w-full flex items-center justify-center"
+  >
+    <Bento items={items} />
+  </main>
+  );
 };
 
-interface FeatureCardProps {
-  title: string;
-  description?: string;
-  href: string;
-  className?: string;
-}
-
-function FeatureCard({
-  title,
-  href,
-  description,
-  className,
-}: FeatureCardProps) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center bg-primary text-primary-foreground py-3 rounded-md font-medium hover:bg-primary/90 transition-colors w-full"
-    >
-      <Card className="h-full w-full bg-card/50 backdrop-blur-sm hover:border-primary">
-        <CardHeader className="p-4">
-          <CardTitle>{title}</CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </CardHeader>
-        {/* Can add more content or an icon here */}
-      </Card>
-    </Link>
-  );
-}
-
-function FeatureGrid() {
-  return (
-    <section className="flex gap-6 w-full mx-auto py-4 text-center justify-center items-center">
-      <FeatureCard
-        title="Components"
-        description="Browse UI components."
-        href="/docs/components"
-        className="w-full"
-      />
-      <FeatureCard
-        title="OpenAPI Specs"
-        description="Interact with the Morpho API."
-        href="/docs/openapi"
-        className="w-full"
-      />
-      {/* Add more FeatureCards here for a more complex bento layout if needed */}
-    </section>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <main className="flex-1 flex flex-col items-center justify-start pt-12 md:pt-16 gap-4">
-      <HeroSection
-        className="flex flex-col mb-12 pt-12"
-        ctaComponent={
-          <Link
-            href="/docs/components"
-            className="flex items-center bg-primary text-primary-foreground py-3 rounded-md font-medium hover:bg-primary/90 transition-colors w-full"
-          >
-            <Button variant="outline" size="default" className="w-full">
-              Get Started
-            </Button>
-          </Link>
-        }
-        imageURL="/hero.svg"
-      />
-      <FeatureGrid />
-    </main>
-  );
-}
+export default HomePage
