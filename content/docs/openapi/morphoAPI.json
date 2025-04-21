@@ -2941,7 +2941,8 @@
               },
               "required": false,
               "name": "assets",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -2951,7 +2952,8 @@
               },
               "required": false,
               "name": "chains",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -2961,7 +2963,8 @@
               },
               "required": false,
               "name": "creators",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -2971,7 +2974,8 @@
               },
               "required": false,
               "name": "markets",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -2981,7 +2985,8 @@
               },
               "required": false,
               "name": "vaults",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3006,7 +3011,8 @@
               },
               "required": false,
               "name": "funded",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3031,7 +3037,8 @@
               },
               "required": false,
               "name": "active",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3040,7 +3047,8 @@
               },
               "required": false,
               "name": "active_after",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3049,7 +3057,8 @@
               },
               "required": false,
               "name": "active_before",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3064,7 +3073,8 @@
               },
               "required": false,
               "name": "type",
-              "in": "query"
+              "in": "query",
+              "example": ""
             },
             {
               "schema": {
@@ -3076,7 +3086,8 @@
               },
               "required": false,
               "name": "sort",
-              "in": "query"
+              "in": "query",
+              "example": ""
             }
           ],
           "responses": {
