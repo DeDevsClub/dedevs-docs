@@ -17,18 +17,19 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^15.3.1",
+    "fumadocs-core": "^15",
+    "fumadocs-mdx": "^11",
+    "fumadocs-ui": "^15",
     "next": "^15",
     "react": "^19",
-    "react-dom": "^19",
-    "fumadocs-ui": "^15",
-    "fumadocs-core": "^15",
-    "fumadocs-mdx": "^11"
+    "react-dom": "^19"
   },
   "devDependencies": {
+    "@types/mdx": "^2",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5",
-    "@types/mdx": "^2"
+    "typescript": "^5"
   }
 }
