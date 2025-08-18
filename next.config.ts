@@ -8,6 +8,8 @@ const withAnalyzer = createBundleAnalyzer({
 
 const config: NextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['@dedevs/chat-components'],
+
   logging: {
     fetches: {
       fullUrl: true,
@@ -23,6 +25,7 @@ const config: NextConfig = {
     'oxc-transform',
     'twoslash',
     'shiki',
+    'fumadocs-mdx',
   ],
   images: {
     remotePatterns: [
@@ -38,6 +41,31 @@ const config: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'docs.dedevs.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets-global.website-files.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
         hostname: 'docs.dedevs.club',
         port: '',
       },
@@ -46,18 +74,13 @@ const config: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/',
+        destination: '/docs/club/overview',
+        permanent: true,
+      },
+      {
         source: '/docs',
-        destination: '/docs/components/cards',
-        permanent: true,
-      },
-      {
-        source: '/docs/components',
-        destination: '/docs/components/cards',
-        permanent: true,
-      },
-      {
-        source: '/docs/openapi',
-        destination: '/docs/openapi/programs',
+        destination: '/docs/club/overview',
         permanent: true,
       },
     ];
@@ -65,5 +88,6 @@ const config: NextConfig = {
 };
 
 const withMDX = createMDX();
-// @ts-ignore
+// export default withMDX(config);
+
 export default withAnalyzer(withMDX(config));

@@ -9,7 +9,6 @@ export const { GET } = createFromSource(source, {
       url: page.url,
       id: page.url,
       structuredData: page.data.structuredData,
-      // use your desired value, like page.slugs[0]
       tag: page.slugs[0],
     };
   },
