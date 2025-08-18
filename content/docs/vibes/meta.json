@@ -1,0 +1,12 @@
+{
+  "title": "VibesGuide",
+  "description": "Documentation for VibesGuide",
+  "root": true,
+  "icon": "Star",
+  "pages": [
+    "overview", 
+    "concepts", 
+    "---Resources---",
+    "resources/repositories"
+  ]
+}
