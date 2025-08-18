@@ -1,5 +1,5 @@
 {
     "icon": "Star",
     "root": true,
-    "pages": ["club", "design", "vibes"]
+    "pages": ["club", "design", "vibes", "products"]
 }

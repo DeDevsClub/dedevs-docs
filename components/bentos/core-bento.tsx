@@ -32,12 +32,12 @@ const items: GridItem[] = [
     cta: "/docs/vibes/overview",
   },
   {
-    title: "Skool Community",
+    title: "Products",
     type: "products",
     description:
-      "Join, onboard, and get the most from our Skool.",
-    icon: <Icon icon="mdi:school" className="w-6 h-6 text-foreground" />,
-    cta: "/docs/club/concepts/skool",
+      "Products in development and production.",
+    icon: <Icon icon="mdi:web" className="w-6 h-6 text-foreground" />,
+    cta: "/docs/products/overview",
   },
 ];
 
