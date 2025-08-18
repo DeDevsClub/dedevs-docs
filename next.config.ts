@@ -74,13 +74,43 @@ const config: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/',
+        source: '/docs',
         destination: '/docs/club/overview',
         permanent: true,
       },
       {
-        source: '/docs',
+        source: '/club',
         destination: '/docs/club/overview',
+        permanent: true,
+      },
+      {
+        source: '/docs/club',
+        destination: '/docs/club/overview',
+        permanent: true,
+      },
+      {
+        source: '/design',
+        destination: '/docs/design/overview',
+        permanent: true,
+      },
+      {
+        source: '/docs/design',
+        destination: '/docs/design/overview',
+        permanent: true,
+      },
+      {
+        source: '/vibes',
+        destination: '/docs/vibes/overview',
+        permanent: true,
+      },
+      {
+        source: '/docs/vibes',
+        destination: '/docs/vibes/overview',
+        permanent: true,
+      },
+      {
+        source: '/skool',
+        destination: '/docs/club/skool',
         permanent: true,
       },
     ];
