@@ -8,17 +8,17 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  color?: 'primary' | 'outline' | 'ghost' | 'secondary';
-  size?: 'default' | 'sm' | 'icon' | 'icon-sm';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 
 const Button = (
-  { className, color, size, asChild = false, ...props }: ButtonProps
+  { className, variant, size, asChild = false, ...props }: ButtonProps
 ) => {  
   const Comp = asChild ? Slot : "button";
   return (
     <Comp
-      className={cn(buttonVariants({ color, size, className }))}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   );

@@ -1,8 +1,10 @@
-
+@import "tailwindcss";
 @import "tw-animate-css";
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
 
 @custom-variant dark (&:is(.dark *));
-
 
 /* You can add custom global styles below */
 
@@ -83,41 +85,37 @@
 
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0);
-
-  --foreground: oklch(0.141 0.005 285.823);
-
   --card: oklch(1 0 0);
 
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --card-foreground: oklch(0.147 0.004 49.25);
 
   --popover: oklch(1 0 0);
 
-  --popover-foreground: oklch(0.141 0.005 285.823);
+  --popover-foreground: oklch(0.147 0.004 49.25);
 
-  --primary: oklch(0.21 0.006 285.885);
+  --primary: oklch(0.216 0.006 56.043);
 
-  --primary-foreground: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.985 0.001 106.423);
 
-  --secondary: oklch(0.967 0.001 286.375);
+  --secondary: oklch(58.73% 0.22536480034099704 261.5966310176387);
 
-  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --secondary-foreground: oklch(0.216 0.006 56.043);
 
-  --muted: oklch(0.967 0.001 286.375);
+  --muted: oklch(58.73% 0.22536480034099704 261.5966310176387);
 
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  --muted-foreground: oklch(0.553 0.013 58.071);
 
-  --accent: oklch(0.967 0.001 286.375);
+  --accent: oklch(58.73% 0.22536480034099704 261.5966310176387);
 
-  --accent-foreground: oklch(0.21 0.006 285.885);
+  --accent-foreground: oklch(0.216 0.006 56.043);
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.92 0.004 286.32);
+  --border: oklch(0.923 0.003 48.717);
 
-  --input: oklch(0.92 0.004 286.32);
+  --input: oklch(0.923 0.003 48.717);
 
-  --ring: oklch(0.705 0.015 286.067);
+  --ring: oklch(0.709 0.01 56.259);
 
   --chart-1: oklch(0.646 0.222 41.116);
 
@@ -129,52 +127,56 @@
 
   --chart-5: oklch(0.769 0.188 70.08);
 
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.985 0.001 106.423);
 
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
 
-  --sidebar-primary: oklch(0.21 0.006 285.885);
+  --sidebar-primary: oklch(0.216 0.006 56.043);
 
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
 
-  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent: oklch(58.73% 0.22536480034099704 261.5966310176387);
 
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
 
-  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-border: oklch(0.923 0.003 48.717);
 
-  --sidebar-ring: oklch(0.705 0.015 286.067);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
+
+  --background: oklch(1 0 0);
+
+  --foreground: oklch(0.147 0.004 49.25);
 }
 
 .dark {
 
-  --background: oklch(0.141 0.005 285.823);
+  --background: oklch(0.147 0.004 49.25);
 
-  --foreground: oklch(0.985 0 0);
+  --foreground: oklch(0.985 0.001 106.423);
 
-  --card: oklch(0.21 0.006 285.885);
+  --card: oklch(0.216 0.006 56.043);
 
-  --card-foreground: oklch(0.985 0 0);
+  --card-foreground: oklch(0.985 0.001 106.423);
 
-  --popover: oklch(0.21 0.006 285.885);
+  --popover: oklch(0.216 0.006 56.043);
 
-  --popover-foreground: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.985 0.001 106.423);
 
-  --primary: oklch(0.92 0.004 286.32);
+  --primary: oklch(0.923 0.003 48.717);
 
-  --primary-foreground: oklch(0.21 0.006 285.885);
+  --primary-foreground: oklch(0.216 0.006 56.043);
 
-  --secondary: oklch(0.274 0.006 286.033);
+  --secondary: oklch(0.268 0.007 34.298);
 
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary-foreground: oklch(0.985 0.001 106.423);
 
-  --muted: oklch(0.274 0.006 286.033);
+  --muted: oklch(0.268 0.007 34.298);
 
-  --muted-foreground: oklch(0.705 0.015 286.067);
+  --muted-foreground: oklch(0.709 0.01 56.259);
 
-  --accent: oklch(0.274 0.006 286.033);
+  --accent: oklch(0.268 0.007 34.298);
 
-  --accent-foreground: oklch(0.985 0 0);
+  --accent-foreground: oklch(0.985 0.001 106.423);
 
   --destructive: oklch(0.704 0.191 22.216);
 
@@ -182,7 +184,7 @@
 
   --input: oklch(1 0 0 / 15%);
 
-  --ring: oklch(0.552 0.016 285.938);
+  --ring: oklch(0.553 0.013 58.071);
 
   --chart-1: oklch(0.488 0.243 264.376);
 
@@ -194,21 +196,28 @@
 
   --chart-5: oklch(0.645 0.246 16.439);
 
-  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar: oklch(0.216 0.006 56.043);
 
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
 
   --sidebar-primary: oklch(0.488 0.243 264.376);
 
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
 
-  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
 
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
 
   --sidebar-border: oklch(1 0 0 / 10%);
 
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+/* Custom styles to ensure docs main content is full width */
+/* This targets the 'main' element within Fumadocs' document layout (div[role="document"]) */
+/* when it has a Tailwind max-width class (e.g., max-w-3xl by default in some Fumadocs themes/components) */
+div[role="document"] > main[class*="max-w-"] {
+  max-width: none;
 }
 
 @layer base {
@@ -219,3 +228,113 @@
     @apply bg-background text-foreground;
   }
 }
+
+#scroll-area-viewport > div {
+  display: block !important;
+}
+
+#custom-chat-input {
+  /* hide scroll bar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#custom-chat-input::-webkit-scrollbar {
+  display: none;
+}
+
+#docs-search-results {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#docs-search-results::-webkit-scrollbar {
+  display: none;
+}
+.poweredBy {
+  background: var(--background);
+}
+
+.prompt-suggestion-row {
+  width: 100%;
+}
+
+.prompt-suggestion-button {
+  margin: 8px; padding: 8px; font-size: 15px;
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  color: #383838;
+  box-shadow: #959da533 0 8px 24px;
+}
+
+.loader {
+  margin: 10px;
+  width: 60px;
+  aspect-ratio: 4;
+  background:
+    no-repeat radial-gradient(circle closest-side, #383838 90%, #0000) 0 50%,
+    no-repeat radial-gradient(circle closest-side, #383838 90%, #0000) 50% 50%,
+    no-repeat radial-gradient(circle closest-side, #383838 90%, #0000) 100% 50%
+    ;
+  background-size: calc(100% / 3) 100%;
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  33% {background-size: calc(100% / 3)  0%, calc(100% / 3) 100%, calc(100% / 3) 100%};
+  50% {background-size: calc(100% / 3)  100%, calc(100% / 3) 0%, calc(100% / 3) 100%};
+  66% {background-size: calc(100% / 3)  100%, calc(100% / 3) 100%, calc(100% / 3) 0%};
+}
+
+.bubble {
+  margin: 8px; padding: 8px; font-size: 15px;
+  border: none; color: #383838;
+  box-shadow: #959da533 0 8px 24px; width: 80%;
+  text-align: left;
+}
+
+.bubble.user {
+  border-radius: 20px 20px 0px 20px;
+  background-color: #e1f4ffff;
+  margin-left: auto;
+}
+
+.bubble.assistant {
+  border-radius: 20px 20px 20px 0px;
+  background-color: #dce7ff;
+}
+
+
+.auth-button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  @media (min-width: 640px) {
+    font-size: 0.9rem;
+  }
+  @media (max-width: 640px) {
+    font-size: 0.7rem;
+  }
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* In app/globals.css, after fumadocs imports */
+.bento-item a {
+  text-decoration: none;
+}
+
+a.no-underline {
+  text-decoration: none;
+}
+
+/* a.no-underline {
+  text-decoration: none !important;
+} */

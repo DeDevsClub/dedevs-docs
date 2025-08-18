@@ -1,4 +1,5 @@
 {
-    "pages": ["components", "openapi"],
-    "icon": "Book"
+    "icon": "Star",
+    "root": true,
+    "pages": ["club", "design", "vibes"]
 }

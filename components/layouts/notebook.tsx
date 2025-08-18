@@ -141,8 +141,8 @@ export function DocsLayout({
                   <SidebarCollapseTrigger
                     className={cn(
                       buttonVariants({
-                        color: 'ghost',
-                        size: 'icon-sm',
+                        variant: 'ghost',
+                        size: 'icon',
                       }),
                       'text-fd-muted-foreground mb-auto',
                     )}
@@ -266,8 +266,8 @@ function DocsNavbar({
             <SidebarCollapseTrigger
               className={cn(
                 buttonVariants({
-                  color: 'ghost',
-                  size: 'icon-sm',
+                  variant: 'ghost',
+                  size: 'icon',
                 }),
                 'text-fd-muted-foreground -ms-1.5 me-2 data-[collapsed=false]:hidden max-md:hidden',
               )}
@@ -314,7 +314,7 @@ function DocsNavbar({
                 key={i}
                 item={item}
                 className={cn(
-                  buttonVariants({ size: 'icon-sm', color: 'ghost' }),
+                  buttonVariants({ size: 'icon', variant: 'ghost' }),
                   'text-fd-muted-foreground max-lg:hidden',
                 )}
                 aria-label={item.label}
@@ -338,8 +338,8 @@ function DocsNavbar({
             <SidebarCollapseTrigger
               className={cn(
                 buttonVariants({
-                  color: 'secondary',
-                  size: 'icon-sm',
+                  variant: 'secondary',
+                  size: 'icon',
                 }),
                 'ms-2 text-fd-muted-foreground rounded-full max-md:hidden',
               )}

@@ -236,7 +236,7 @@ function EditOnGitHub({
       {...props}
       className={cn(
         buttonVariants({
-          color: 'secondary',
+          variant: 'secondary',
           className: 'gap-1.5 text-fd-muted-foreground',
         }),
         props.className,
