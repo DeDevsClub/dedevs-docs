@@ -8,6 +8,8 @@ const withAnalyzer = createBundleAnalyzer({
 
 const config: NextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['@dedevs/chat-components'],
+
   logging: {
     fetches: {
       fullUrl: true,
@@ -23,6 +25,7 @@ const config: NextConfig = {
     'oxc-transform',
     'twoslash',
     'shiki',
+    'fumadocs-mdx',
   ],
   images: {
     remotePatterns: [
@@ -35,30 +38,56 @@ const config: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         port: '',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'docs.dedevs.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets-global.website-files.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'docs.dedevs.club',
+        port: '',
+      },
     ],
   },
   async redirects() {
     return [
       {
+        source: '/',
+        destination: '/docs/club/overview',
+        permanent: true,
+      },
+      {
         source: '/docs',
-        destination: '/docs/section/page',
+        destination: '/docs/club/overview',
         permanent: true,
       },
-      {
-        source: '/docs/section',
-        destination: '/docs/section/page',
-        permanent: true,
-      },
-      {
-        source: '/docs/components',
-        destination: '/docs/components/cards',
-        permanent: true,
-      }
     ];
   },
 };
 
 const withMDX = createMDX();
-// @ts-ignore
+// export default withMDX(config);
+
 export default withAnalyzer(withMDX(config));

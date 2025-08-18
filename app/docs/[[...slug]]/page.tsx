@@ -1,41 +1,56 @@
-import { source } from '@/lib/source';
+import { source } from "@/lib/source";
 import {
-  DocsPage,
   DocsBody,
   DocsDescription,
+  DocsPage,
   DocsTitle,
-} from '@/components/layouts/page';
-import { notFound } from 'next/navigation';
-import defaultMdxComponents, { createRelativeLink } from 'fumadocs-ui/mdx';
-import { Steps, Step } from '@/components/steps';
+  } from "@/components/layouts/page";
+import { getMDXComponents } from "@/mdx-components";
+import { NotFound } from "@/components/not-found";
+import { SidebarProvider } from "fumadocs-ui/provider";
+// import { TableOfContent } from "@/components/table-of-content";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
-  const params = await props.params;
+  const params = await props.params;  
   const page = source.getPage(params.slug);
-  if (!page) notFound();
-
-  const MDXContent = page.data.body;
-
+  if (!page) return <NotFound />;
+  const hasToc = page.data.toc && page.data.toc.length > 0;
+  const MDX = page.data.body;
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <SidebarProvider>
+    <DocsPage
+      // todo: add last updated
+      toc={hasToc ? page.data.toc : []}
+      lastUpdate={page.data.lastModified ? new Date(page.data.lastModified) : new Date()}
+      editOnGithub={{
+        owner: "DeDevsClub",
+        repo: "dedevs-docs",
+        sha: "main",
+        path: `content/docs/${page.file.path}`,
+      }}
+      tableOfContent={{ 
+        enabled: hasToc, 
+        style: 'clerk',
+        // component: <TableOfContent />
+        // header: <h1>{page.data.title}</h1>,
+        // footer: <h2>{page.data.title}</h2>,
+      }}
+      full={true}
+      // container={{ className: "flex flex-col w-full" }}
+      // container={{ className: "w-full" }}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
+
       <DocsBody>
-        <MDXContent
-          components={{
-            ...defaultMdxComponents,
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-            // you can add other MDX components here
-            Steps,
-            Step,
-          }}
-        />
+        <MDX components={getMDXComponents()} />
       </DocsBody>
+      
     </DocsPage>
-  );
+    </SidebarProvider>
+  );  
 }
 
 export async function generateStaticParams() {
@@ -47,10 +62,12 @@ export async function generateMetadata(props: {
 }) {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+  if (!page) return <NotFound />;
 
   return {
     title: page.data.title,
     description: page.data.description,
+    // tags: page.data.tags,
+    // lastUpdate: page.data.lastModified ? new Date(page.data.lastModified) : undefined,
   };
 }

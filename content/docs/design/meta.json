@@ -1,0 +1,12 @@
+{
+  "title": "Design",
+  "description": "Documentation for Design",
+  "root": true,
+  "icon": "Star",
+  "pages": [
+    "overview", 
+    "concepts", 
+    "---Resources---",
+    "resources/components"
+  ]
+}
