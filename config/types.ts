@@ -5,7 +5,7 @@ interface ContractsTableProps {
 }
 
 interface GridItem {
-  type: 'concept' | 'guide' | 'resource' | 'showcase';
+  type: 'club' | 'design' | 'vibes' | 'products';
   title: string
   description: string
   icon: React.ReactNode

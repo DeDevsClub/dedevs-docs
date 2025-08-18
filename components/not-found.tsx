@@ -10,7 +10,7 @@ export interface BentoItem {
   title: string;
   description: string;
   url: string; // Maps to cta in bento.tsx
-  type: "club" | "design" | "vibes"; // For badge styling
+  type: "club" | "design" | "vibes" | "products"; // For badge styling
   icon?: React.ReactNode; // From bento.tsx
   tags?: string[]; // From bento.tsx
   // Removed isFeatured and imageUrl to align with bento.tsx's item structure
@@ -46,6 +46,14 @@ function generateItems() {
       url: `/docs/vibes`,
       type: "vibes",
       tags: ["vibes"],
+    },
+    {
+      id: "4",
+      title: `Products`,
+      description: `Explore DeDevs Products.`,
+      url: `/docs/products`,
+      type: "products",
+      tags: ["products"],
     },
   ];
 

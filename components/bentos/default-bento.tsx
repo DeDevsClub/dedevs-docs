@@ -13,7 +13,7 @@ const items: GridItem[] = [
       cta: "/docs/club/overview",
       ctaText: "Explore Club",
       external: false,
-      type: "concept",
+      type: "club",
     },
     {
       title: "DeDevs UI",
@@ -23,7 +23,7 @@ const items: GridItem[] = [
       cta: "/docs/design/overview",
       ctaText: "Explore Design",
       external: false,
-      type: "concept",
+      type: "design",
     },
     {
       title: "Vibes Guide",
@@ -33,7 +33,7 @@ const items: GridItem[] = [
       cta: "/docs/vibes/overview",
       ctaText: "Explore Vibes",
       external: false,
-      type: "concept",
+      type: "vibes",
     },
     { 
       title: "Skool Community",
@@ -43,7 +43,7 @@ const items: GridItem[] = [
       cta: "/docs/club/concepts/skool",
       ctaText: "Join Skool",
       external: false,
-      type: "concept",
+      type: "products",
     }
   ]
 

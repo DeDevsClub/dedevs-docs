@@ -7,7 +7,7 @@ import { BentoItemCard } from "./bento-item-card";
 
 const items: GridItem[] = [
   {
-    type: "guide",
+    type: "club",
     title: "Getting Started: DeDevs Club",
     description: "Join the community and learn how to participate effectively.",
     cta: "/docs/club/overview",
@@ -15,7 +15,7 @@ const items: GridItem[] = [
     icon: <Icon icon="mdi:account-group" className="w-6 h-6 text-foreground" />,
   },
   {
-    type: "guide",
+    type: "design",
     title: "Design System: DeDevs UI",
     description: "Understand our design system and component usage.",
     cta: "/docs/design/overview",
@@ -23,7 +23,7 @@ const items: GridItem[] = [
     icon: <Icon icon="mdi:palette" className="w-6 h-6 text-foreground" />,
   },
   {
-    type: "guide",
+    type: "vibes",
     title: "Culture Guide: Vibes",
     description: "Principles and practices for how we build together.",
     cta: "/docs/vibes/overview",
@@ -31,7 +31,7 @@ const items: GridItem[] = [
     icon: <Icon icon="mdi:fire" className="w-6 h-6 text-foreground" />,
   },
   {
-    type: "guide",
+    type: "products",
     title: "Join our Skool Community",
     description: "How to join, onboard, and get the most value.",
     cta: "/docs/club/concepts/skool",

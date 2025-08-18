@@ -1,0 +1,11 @@
+{
+  "title": "Products",
+  "description": "Documentation for Products",
+  "root": true,
+  "icon": "Star",
+  "pages": [
+    "overview",
+    "development",
+    "production"
+  ]
+}

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const items: GridItem[] = [
   {
     title: "DeDevs Club",
-    type: "concept",
+    type: "club",
     description:
       "Community, programs, and how to participate.",
     icon: <Icon icon="mdi:account-group" className="w-6 h-6 text-foreground" />,
@@ -17,7 +17,7 @@ const items: GridItem[] = [
   },
   {
     title: "DeDevs UI",
-    type: "concept",
+    type: "design",
     description:
       "Design system, components, and UX guidance.",
     icon: <Icon icon="mdi:palette" className="w-6 h-6 text-foreground" />,
@@ -25,7 +25,7 @@ const items: GridItem[] = [
   },
   {
     title: "Vibes Guide",
-    type: "concept",
+    type: "vibes",
     description:
       "Culture, principles, and how we build together.",
     icon: <Icon icon="mdi:fire" className="w-6 h-6 text-foreground" />,
@@ -33,7 +33,7 @@ const items: GridItem[] = [
   },
   {
     title: "Skool Community",
-    type: "concept",
+    type: "products",
     description:
       "Join, onboard, and get the most from our Skool.",
     icon: <Icon icon="mdi:school" className="w-6 h-6 text-foreground" />,

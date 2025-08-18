@@ -48,6 +48,7 @@ export default function DefaultSearchDialog(props: SharedProps) {
             <TagsListItem value="club">Club</TagsListItem>
             <TagsListItem value="design">Design</TagsListItem>
             <TagsListItem value="vibes">Vibes</TagsListItem>
+            <TagsListItem value="products">Products</TagsListItem>
           </TagsList>
         </SearchDialogFooter>
       </SearchDialogContent>
