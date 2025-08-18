@@ -57,7 +57,7 @@ export interface DocsLayoutProps extends BaseLayoutProps {
 
 export function DocsLayout(props: DocsLayoutProps) {
   const {
-    tabMode = 'both', // 'sidebar' | 'navbar' | 'auto'
+    tabMode = 'navbar', // 'sidebar' | 'navbar' | 'auto'
     nav: { transparentMode, ...nav } = {},
     sidebar: {
       tabs: tabOptions,
@@ -138,10 +138,7 @@ export function DocsLayout(props: DocsLayoutProps) {
                 <RootToggle options={tabs} className="lg:hidden" />
               )}
               {(tabMode === 'both') && tabs.length > 0 && (
-                <RootToggle options={tabs}
-                  className="mb-2"
-                  placeholder=""
-                />
+                <RootToggle className="mb-2" options={tabs} />
               )}
             </SidebarHeader>
             {/* </HideIfEmpty> */}

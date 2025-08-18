@@ -8,18 +8,33 @@ import Image from "next/image";
 export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
-      <Link href="/">
-        <Image
-          src="/favicon.ico"
-          alt="DeDevs"
-          className="max-h-9 w-full px-12 py-1 justify-center flex items-center text-center mt-1"
-          width={124}
-          height={32}
-        />
-      </Link>
+      <div className="flex flex-cols gap-2 justify-between h-full w-full items-center">
+        <Link href="/docs" className="flex gap-2 items-center justify-center">
+          <Image
+            src="/favicon.svg"
+            alt="DeDevs"
+            className="flex h-7 w-7 justify-center items-center"
+            width={1200}
+            height={1200}
+          />
+        <div 
+          className="text-base h-full w-full justify-center flex items-center pl-1 text-center font-semibold"
+          >
+          DeDevs
+        </div>
+        </Link>
+      </div>
     ),
   },
   links: [
+    {
+      type: "icon",
+      icon: (
+        <Icon icon="hugeicons:skool" className="size-5 shrink-0 hover:border border-fd-muted-foreground rounded-lg" />
+      ),
+      url: "https://skool.com/devs",
+      text: "Join",
+    },
     {
       type: "icon",
       icon: (
@@ -44,22 +59,22 @@ export const baseOptions: BaseLayoutProps = {
       url: "https://www.youtube.com/@BunsDev",
       text: "YouTube",
     },
-    {
-      type: "custom",
-      children: (
-        <Link
-          href="https://skool.com/devs"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button
-            variant="outline"
-          >
-            Join <Icon icon="line-md:external-link" />
-          </Button>
-        </Link>
-      ),
-    },
+    // {
+    //   type: "custom",
+    //   children: (
+    //     <Link
+    //       href="https://skool.com/devs"
+    //       target="_blank"
+    //       rel="noopener noreferrer"
+    //     >
+    //       <Button
+    //         variant="outline"
+    //       >
+    //         Join <Icon icon="line-md:external-link" />
+    //       </Button>
+    //     </Link>
+    //   ),
+    // },
   ],
   // links: [
   //   { 
