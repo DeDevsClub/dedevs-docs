@@ -48,12 +48,14 @@ export const baseOptions: BaseLayoutProps = {
       type: "custom",
       children: (
         <Link
-          href="https://docs.dedevs.club"
+          href="https://skool.com/devs"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Button
             variant="outline"
           >
-            Launch <Icon icon="line-md:external-link" />
+            Join <Icon icon="line-md:external-link" />
           </Button>
         </Link>
       ),

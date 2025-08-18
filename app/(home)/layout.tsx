@@ -2,11 +2,11 @@ import { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
 import "@/app/globals.css";
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
-import Image from 'next/image';
 // import Preview from '@/public/logo-horizontal.svg';
 import { baseOptions } from '@/app/docs/layout.config';
 import { Icon } from '@iconify/react';
 import { links as navLinks } from '@/data/links';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -44,7 +44,7 @@ function Footer() {
     <footer className="mt-auto border-t bg-fd-card py-12 text-fd-secondary-foreground">
       <div className="container flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
         <div className="flex items-center gap-3">
-          <a
+          <Link
             href="https://x.com/DeDevsClub"
             rel="noreferrer noopener"
             target="_blank"
@@ -52,8 +52,8 @@ function Footer() {
             className="text-fd-muted-foreground hover:text-fd-foreground transition-colors"
           >
             <Icon icon="line-md:twitter-x" className="h-5 w-5" />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://github.com/DeDevsClub"
             rel="noreferrer noopener"
             target="_blank"
@@ -61,7 +61,7 @@ function Footer() {
             className="text-fd-muted-foreground hover:text-fd-foreground transition-colors"
           >
             <Icon icon="line-md:github-twotone" className="h-5 w-5" />
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
