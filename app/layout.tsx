@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 // import { ClerkProvider } from "@clerk/nextjs";
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider, SidebarProvider } from "fumadocs-ui/provider";
 // import ChatWidget from "@/components/chat/widget";
 import DefaultSearchDialog from "@/components/search";
 
@@ -85,8 +85,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 SearchDialog: DefaultSearchDialog,
               }}
             >
+              <SidebarProvider>
+                {children}
+              </SidebarProvider>
               {/* <ChatWidget /> */}
-              {children}
             </RootProvider>
           </ThemeProvider>
         </body>

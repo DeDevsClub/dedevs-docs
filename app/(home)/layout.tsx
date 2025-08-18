@@ -1,18 +1,23 @@
-import type { Metadata, Viewport } from 'next'
+import { ReactNode } from 'react';
+import type { Metadata, Viewport } from 'next';
 import "@/app/globals.css";
-import { HomeLayout } from '@/components/layouts/home';
-import { baseOptions } from '@/app/layout.config';
+import { HomeLayout } from 'fumadocs-ui/layouts/home';
+import Image from 'next/image';
+// import Preview from '@/public/logo-horizontal.svg';
+import { baseOptions } from '@/app/docs/layout.config';
+import { Icon } from '@iconify/react';
+import { links as navLinks } from '@/data/links';
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://docs.dedevs.club"
+    process.env.NEXT_PUBLIC_APP_URL || "https://docs.dedevs.com"
   ),
   title: {
     default: "DeDevs | Docs",
     template: "%s | DeDevs | Docs"
   },
-  description: "Build, Manage, and Customize your DevDocs",
-} 
+  description: "Documentation for DeDevs.",
+}
 
 export const viewport: Viewport = {
   themeColor: [
@@ -21,16 +26,44 @@ export const viewport: Viewport = {
   ]
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <main className="flex-1 flex flex-col items-center justify-start pt-12 md:pt-16 gap-4">
-      <HomeLayout {...baseOptions}>
-        {children}
-      </HomeLayout>
-    </main>
-  )
+    <HomeLayout
+      {...baseOptions}
+      links={navLinks}
+      className="dark:bg-neutral-950 dark:[--color-fd-background:var(--color-neutral-950)]"
+    >
+      {children}
+      <Footer />
+    </HomeLayout>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="mt-auto border-t bg-fd-card py-12 text-fd-secondary-foreground">
+      <div className="container flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
+        <div className="flex items-center gap-3">
+          <a
+            href="https://x.com/DeDevsClub"
+            rel="noreferrer noopener"
+            target="_blank"
+            aria-label="Twitter"
+            className="text-fd-muted-foreground hover:text-fd-foreground transition-colors"
+          >
+            <Icon icon="line-md:twitter-x" className="h-5 w-5" />
+          </a>
+          <a
+            href="https://github.com/DeDevsClub"
+            rel="noreferrer noopener"
+            target="_blank"
+            aria-label="GitHub"
+            className="text-fd-muted-foreground hover:text-fd-foreground transition-colors"
+          >
+            <Icon icon="line-md:github-twotone" className="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
 }

@@ -7,6 +7,7 @@ import {
   } from "@/components/layouts/page";
 import { getMDXComponents } from "@/mdx-components";
 import { NotFound } from "@/components/not-found";
+import { SidebarProvider } from "fumadocs-ui/provider";
 // import { TableOfContent } from "@/components/table-of-content";
 
 export default async function Page(props: {
@@ -18,6 +19,7 @@ export default async function Page(props: {
   const hasToc = page.data.toc && page.data.toc.length > 0;
   const MDX = page.data.body;
   return (
+    <SidebarProvider>
     <DocsPage
       // todo: add last updated
       toc={hasToc ? page.data.toc : []}
@@ -47,6 +49,7 @@ export default async function Page(props: {
       </DocsBody>
       
     </DocsPage>
+    </SidebarProvider>
   );  
 }
 
