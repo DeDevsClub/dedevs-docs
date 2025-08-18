@@ -40,11 +40,11 @@ import {
   LargeSearchToggle,
   SearchToggle,
 } from '../layout/search-toggle';
-import { HideIfEmpty } from 'fumadocs-core/hide-if-empty';
+// import { HideIfEmpty } from 'fumadocs-core/hide-if-empty';
 
 export interface DocsLayoutProps extends BaseLayoutProps {
   tree: PageTree.Root;
-  tabMode?: 'sidebar' | 'navbar';
+  tabMode?: 'sidebar' | 'navbar' | 'both';
 
   nav?: BaseLayoutProps['nav'] & {
     mode?: 'top' | 'auto';
@@ -57,7 +57,7 @@ export interface DocsLayoutProps extends BaseLayoutProps {
 
 export function DocsLayout(props: DocsLayoutProps) {
   const {
-    tabMode = 'navbar',
+    tabMode = 'both', // 'sidebar' | 'navbar' | 'auto'
     nav: { transparentMode, ...nav } = {},
     sidebar: {
       tabs: tabOptions,
@@ -67,9 +67,9 @@ export function DocsLayout(props: DocsLayoutProps) {
       ...sidebar
     } = {},
     i18n = false,
-    themeSwitch = { 
-        enabled: true,
-        mode: 'light-dark',
+    themeSwitch = {
+      enabled: true,
+      mode: 'light-dark',
     },
   } = props;
 
@@ -93,6 +93,7 @@ export function DocsLayout(props: DocsLayoutProps) {
       >
         {nav.title}
       </Link>
+      {nav.children}
       {(sidebar.collapsible ?? true) && (
         <SidebarCollapseTrigger
           className={cn(
@@ -125,19 +126,25 @@ export function DocsLayout(props: DocsLayoutProps) {
               sidebar.className,
             )}
           >
-            <HideIfEmpty as={Fragment}>
-              <SidebarHeader>
-                {navMode === 'auto' && sidebarHeader}
-                {nav.children}
-                {sidebarBanner}
-                {tabMode === 'sidebar' && tabs.length > 0 ? (
-                  <RootToggle className="mb-2" options={tabs} />
-                ) : null}
-                {tabMode === 'navbar' && tabs.length > 0 && (
-                  <RootToggle options={tabs} className="lg:hidden" />
-                )}
-              </SidebarHeader>
-            </HideIfEmpty>
+            {/* <HideIfEmpty as={Fragment}> */}
+            <SidebarHeader>
+              {navMode === 'auto' && sidebarHeader}
+              {nav.children}
+              {sidebarBanner}
+              {(tabMode === 'sidebar') && tabs.length > 0 ? (
+                <RootToggle className="mb-2" options={tabs} />
+              ) : null}
+              {(tabMode === 'navbar') && tabs.length > 0 && (
+                <RootToggle options={tabs} className="lg:hidden" />
+              )}
+              {(tabMode === 'both') && tabs.length > 0 && (
+                <RootToggle options={tabs}
+                  className="mb-2"
+                  placeholder=""
+                />
+              )}
+            </SidebarHeader>
+            {/* </HideIfEmpty> */}
             <SidebarViewport>
               {links
                 .filter((item) => item.type !== 'icon')
@@ -154,43 +161,43 @@ export function DocsLayout(props: DocsLayoutProps) {
 
               <SidebarPageTree components={sidebarComponents} />
             </SidebarViewport>
-            <HideIfEmpty as={Fragment}>
-              <SidebarFooter className="flex flex-row items-center justify-end">
-                <div className="flex items-center flex-1 empty:hidden lg:hidden">
-                  {links
-                    .filter((item) => item.type === 'icon')
-                    .map((item, i) => (
-                      <BaseLinkItem
-                        key={i}
-                        item={item}
-                        className={cn(
-                          buttonVariants({
-                            size: 'icon',
-                            variant: 'ghost',
-                            className: 'text-fd-muted-foreground',
-                          }),
-                        )}
-                        aria-label={item.label}
-                      >
-                        {item.icon}
-                      </BaseLinkItem>
-                    ))}
-                </div>
-                {i18n ? (
-                  <LanguageToggle className="me-auto md:hidden">
-                    <Languages className="size-4.5 text-fd-muted-foreground" />
-                  </LanguageToggle>
-                ) : null}
-                {themeSwitch.enabled !== false &&
-                  (themeSwitch.component ?? (
-                    <ThemeToggle
-                      className="md:hidden"
-                      mode={themeSwitch?.mode ?? 'light-dark'}
-                    />
+            {/* <HideIfEmpty as={Fragment}> */}
+            <SidebarFooter className="flex flex-row items-center justify-end">
+              <div className="flex items-center flex-1 empty:hidden lg:hidden">
+                {links
+                  .filter((item) => item.type === 'icon')
+                  .map((item, i) => (
+                    <BaseLinkItem
+                      key={i}
+                      item={item}
+                      className={cn(
+                        buttonVariants({
+                          size: 'icon',
+                          variant: 'ghost',
+                          className: 'text-fd-muted-foreground',
+                        }),
+                      )}
+                      aria-label={item.label}
+                    >
+                      {item.icon}
+                    </BaseLinkItem>
                   ))}
-                {sidebarFooter}
-              </SidebarFooter>
-            </HideIfEmpty>
+              </div>
+              {i18n ? (
+                <LanguageToggle className="me-auto md:hidden">
+                  <Languages className="size-4.5 text-fd-muted-foreground" />
+                </LanguageToggle>
+              ) : null}
+              {themeSwitch.enabled !== false &&
+                (themeSwitch.component ?? (
+                  <ThemeToggle
+                    className="md:hidden"
+                    mode={themeSwitch?.mode ?? 'light-dark'}
+                  />
+                ))}
+              {sidebarFooter}
+            </SidebarFooter>
+            {/* </HideIfEmpty> */}
           </Sidebar>
           <DocsNavbar
             {...props}
@@ -273,7 +280,7 @@ function DocsNavbar({
               )}
             />
           ))}
-          {/* NAVBAR CHILDREN */}
+        {/* NAVBAR CHILDREN */}
         <div className="flex flex-1 flex-row items-center justify-end">
           <div className="flex flex-row items-center gap-6 px-4 empty:hidden max-lg:hidden justify-end w-full">
             {/* LINKS */}
