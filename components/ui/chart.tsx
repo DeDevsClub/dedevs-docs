@@ -2,10 +2,30 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
-import type { TooltipProps as RTooltipProps, LegendProps as RLegendProps, LegendPayload as RLegendPayload } from "recharts"
+import type { TooltipProps as RTooltipProps, LegendProps as RLegendProps, LegendType } from "recharts"
 
 import { cn } from "@/lib/utils"
+import { Formatter } from "recharts/types/component/DefaultTooltipContent"
+import { ReactElement } from "react"
+import { DataKey } from "recharts/types/util/types"
 
+export interface LegendPayload {
+    /**
+     * This is the text that will be displayed in the legend in the DOM.
+     * If undefined, the text will not be displayed, so the icon will be rendered without text.
+     */
+    value: string | undefined;
+    type?: LegendType;
+    color?: string;
+    payload?: {
+        strokeDasharray?: number | string;
+        value?: any;
+    };
+    formatter?: Formatter<any, any>;
+    inactive?: boolean;
+    legendIcon?: ReactElement<SVGElement>;
+    dataKey?: DataKey<any>;
+}
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
 
@@ -279,7 +299,7 @@ function ChartLegendContent({
   verticalAlign = "bottom",
   nameKey,
 }: React.HTMLAttributes<HTMLDivElement> &
-  { payload?: RLegendPayload[]; verticalAlign?: RLegendProps["verticalAlign"] } & {
+  { payload?: LegendPayload[]; verticalAlign?: RLegendProps["verticalAlign"] } & {
     hideIcon?: boolean
     nameKey?: string
   }) {
