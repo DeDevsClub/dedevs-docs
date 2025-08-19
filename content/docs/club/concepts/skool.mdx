@@ -3,11 +3,64 @@ title: Skool
 description: Learn about DeDevs Skool.
 ---
 
+import { Banner } from '@/components/fumadocs/banner';
+import { InlineTOC } from '@/components/fumadocs/inline-toc';
+import { Tabs, Tab } from '@/components/fumadocs/tabs';
+
 # DeDevs Skool Community
+
+<Banner id="skool-cta" variant="rainbow">
+  <span>
+    Join the community on <a className="underline" href="https://skool.com/devs" target="_blank" rel="noreferrer">Skool</a> · Get updates, events, and support.
+  </span>
+</Banner>
+
+<InlineTOC
+  items={[
+    { title: 'Quick Start', url: '#quick-start', depth: 2 },
+    { title: 'How to Join', url: '#how-to-join', depth: 2 },
+    { title: 'Onboarding', url: '#onboarding', depth: 2 },
+    { title: 'Spaces', url: '#spaces', depth: 2 },
+    { title: 'Posting Guidelines', url: '#posting-guidelines', depth: 2 },
+    { title: 'Events', url: '#events', depth: 2 },
+    { title: 'Roles and Levels', url: '#roles-and-levels', depth: 2 },
+    { title: 'Notifications', url: '#notifications', depth: 2 },
+    { title: 'Moderation', url: '#moderation', depth: 2 },
+    { title: 'Useful Links', url: '#useful-links', depth: 2 },
+    { title: 'FAQ', url: '#faq', depth: 2 },
+  ]}
+  defaultOpen
+>
+  Skool Overview
+</InlineTOC>
 
 Our community hub lives on Skool: https://skool.com/devs
 
 Use this page as your single source of truth for how we use Skool: how to join, participate, and get the most value.
+
+<Tabs items={["Join", "Onboarding", "Spaces"]} label="Summary">
+  <Tab>
+    <ul>
+      <li>Go to https://skool.com/devs</li>
+      <li>Sign in and request to join</li>
+      <li>Approval usually within 24–48h</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <ul>
+      <li>Set up profile (photo, role, bio, links)</li>
+      <li>Read pinned posts and introduce yourself</li>
+      <li>Follow relevant spaces and RSVP to events</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <ul>
+      <li>Announcements, Introductions, Show & Tell</li>
+      <li>Q&A / Help, Resources, Events</li>
+      <li>Jobs & Collabs</li>
+    </ul>
+  </Tab>
+</Tabs>
 
 ## Quick Start
 
@@ -26,7 +79,7 @@ Use this page as your single source of truth for how we use Skool: how to join, 
 
 If access is delayed, DM a moderator on X: https://x.com/DeDevsClub or email support at: support@dedevs.club
 
-## Onboarding Checklist (First 24–48h)
+## Onboarding
 
 - __Set up your profile__: photo, display name, role (e.g., Frontend, Backend, Full‑stack, Designer), and short bio
 - __Read pinned posts__: key announcements and starter guides
@@ -34,7 +87,7 @@ If access is delayed, DM a moderator on X: https://x.com/DeDevsClub or email sup
 - __Pick your spaces__: follow spaces that match your focus (see below)
 - __Join events__: RSVP to the next live session or office hours
 
-## Spaces (Channels)
+## Spaces
 
 We organize discussions into “Spaces” to keep topics focused. Typical spaces include:
 
@@ -68,7 +121,7 @@ Violations may be removed; repeat offenses can result in suspension.
 
 Tip: Add events to your personal calendar after RSVPing.
 
-## Roles, Levels, and Gamification
+## Roles and Levels
 
 Skool includes points/levels for positive participation. Typical actions that earn points:
 
@@ -79,7 +132,7 @@ Skool includes points/levels for positive participation. Typical actions that ea
 
 Higher levels may unlock perks (priority feedback, early access, role badges). Details will be announced in the Announcements space.
 
-## Notifications and Following
+## Notifications
 
 - __Follow spaces__: Click Follow in spaces you care about
 - __Digest emails__: Configure weekly/daily digests in your settings
