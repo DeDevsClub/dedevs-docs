@@ -1,8 +1,82 @@
 ---
-title: "DeDevs Club Overview"
-description: "An overview of DeDevs Club."
+title: "DeDevs Overview"
+description: "An overview of DeDevs."
 ---
 
-# DeDevs Club Overview
+import { Banner } from '@/components/fumadocs/banner'
+import { InlineTOC } from '@/components/fumadocs/inline-toc'
+import { Tabs, Tab } from '@/components/fumadocs/tabs'
+import ContractsTable from '@/components/tables/contracts-table'
+import { contracts } from '@/data/build'
+import { Feedback } from '@/components/cards/feedback-card'
 
-Welcome to DeDevs Club documentation.
+<Banner id="club-cta" variant="rainbow">
+  <span>
+    Welcome to DeDevs — join the community on
+    <a className="underline" href="https://skool.com/devs" target="_blank" rel="noreferrer">Skool</a>
+    to connect, learn, and build together.
+  </span>
+</Banner>
+
+DeDevs is a community of builders, designers, and operators collaborating on products and open knowledge. This page gives you a quick, interactive tour and links you to essentials.
+
+<InlineTOC
+  items={[
+    { title: 'Programs', url: '#programs', depth: 2 },
+    { title: 'How we work', url: '#how-we-work', depth: 2 },
+    { title: 'Core dapps and contracts', url: '#core-dapps-and-contracts', depth: 2 },
+    { title: 'Get involved', url: '#get-involved', depth: 2 },
+    { title: 'Feedback', url: '#feedback', depth: 2 },
+  ]}
+  defaultOpen
+>
+  Overview
+</InlineTOC>
+
+## Programs
+
+<Tabs items={["Community", "Cohorts", "Events"]} label="Explore">
+  <Tab>
+    <ul>
+      <li>Community hub on Skool for discussions, resources, and peer support.</li>
+      <li>Spaces for Announcements, Q&A, Show & Tell, Jobs & Collabs, and more.</li>
+      <li>Weekly digests and curated resources to stay current.</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <ul>
+      <li>Guided learning and build tracks (when announced) with milestones.</li>
+      <li>Mentor feedback, code reviews, and demo sessions.</li>
+      <li>Opportunities to ship features or contribute to docs.</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <ul>
+      <li>Live AMAs, workshops, and office hours with the team and guests.</li>
+      <li>Recordings posted after each session for async viewing.</li>
+      <li>RSVP on Skool to receive reminders and links.</li>
+    </ul>
+  </Tab>
+</Tabs>
+
+## How we work
+
+- <strong>Design</strong>: Explore components and UX guidance in <a href="/docs/design/overview">DeDevs UI</a>.
+- <strong>Culture</strong>: Read principles and practices in the <a href="/docs/vibes/overview">Vibes Guide</a>.
+- <strong>Community</strong>: See how to join and participate in the <a href="/docs/club/concepts/skool">Skool guide</a>.
+
+## Core Products
+(Coming soon)
+
+## Get involved
+
+- Join the community on <a href="https://skool.com/devs" target="_blank" rel="noreferrer">Skool</a>.
+- Star and follow along on <a href="https://github.com/DeDevsClub" target="_blank" rel="noreferrer">GitHub</a>.
+- Read <a href="/docs/club/concepts/skool">Skool onboarding</a> to get set up.
+- Learn the <a href="/docs/design/overview">design system</a> and <a href="/docs/vibes/overview">culture</a>.
+
+## Feedback
+
+We’d love your input — what’s missing or what can be improved?
+
+<Feedback />
