@@ -16,7 +16,7 @@ const items: GridItem[] = [
       type: "club",
     },
     {
-      title: "DeDevs UI",
+      title: "DeDevs Design",
       description: "Design system, components, and UX guidance.",
       icon: <Icon icon="mdi:palette" className="w-6 h-6 text-[#2470FF]" />,
       tags: ["design", "ui"],
@@ -30,9 +30,9 @@ const items: GridItem[] = [
       description: "Culture, principles, and how we build together.",
       icon: <Icon icon="mdi:fire" className="w-6 h-6 text-[#2470FF]" />,
       tags: ["culture", "vibes"],
-      cta: "/docs/vibes/overview",
+      cta: "https://docs.vibes.guide",
+      external: true,
       ctaText: "Explore Vibes",
-      external: false,
       type: "vibes",
     },
     {

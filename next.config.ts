@@ -99,13 +99,13 @@ const config: NextConfig = {
         permanent: true,
       },
       {
-        source: '/vibes',
-        destination: '/docs/vibes/overview',
+        source: '/products',
+        destination: '/docs/products/overview',
         permanent: true,
       },
       {
-        source: '/docs/vibes',
-        destination: '/docs/vibes/overview',
+        source: '/docs/products',
+        destination: '/docs/products/overview',
         permanent: true,
       },
       {

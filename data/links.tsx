@@ -50,7 +50,7 @@ export const links: LinkItemType[] = [
             </div>
             <p className="font-medium">Club</p>
             <p className="text-fd-muted-foreground text-sm">
-              Learn about DeDevs.
+              Learn about DeDevs Club.
             </p>
           </NavbarMenuLink>
 

@@ -14,7 +14,7 @@ const capabilities: GridItem[] = [
     tags: ["community", "club"],
   },
   {
-    title: "DeDevs UI",
+    title: "DeDevs Design",
     description: "Design system, components, and UX guidance.",
     cta: "/docs/design/overview",
     type: "design",
@@ -24,7 +24,8 @@ const capabilities: GridItem[] = [
   {
     title: "Vibes Guide",
     description: "Culture, principles, and how we build together.",
-    cta: "/docs/vibes/overview",
+    cta: "https://docs.vibes.guide",
+    external: true,
     type: "vibes",
     icon: <Icon icon="mdi:fire" className="w-6 h-6 text-foreground" />,
     tags: ["culture", "vibes"],
@@ -60,12 +61,13 @@ const items: GridItem[] = [
     type: "vibes",
     title: `Vibes`,
     description: `Access a curated collection of valuable resources, including tools, libraries, and external links.`,
-    cta: `/docs/vibes/overview`,
+    cta: "https://docs.vibes.guide",
+    external: true,
     tags: ["vibes", "production", "resources"],
     icon: (
       <Icon icon="mdi:fire" className="w-6 h-6 text-foreground" />
     ),
-  },  
+  },
   {
     type: "products",
     title: `Products`,
