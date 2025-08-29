@@ -1,0 +1,209 @@
+---
+title: Components Overview
+description: Overview of all available components in the DeDevs UI Design System with categories and usage patterns.
+---
+
+# Components Overview
+
+The DeDevs UI Design System provides a comprehensive collection of components organized by category and use case. Each component is built with accessibility, performance, and composability in mind.
+
+## Component Categories
+
+### Layout Components
+Foundation components for structuring your application:
+
+- **Container** - Responsive content containers with consistent spacing
+- **Grid** - Flexible grid system for complex layouts  
+- **Stack** - Vertical and horizontal spacing utilities
+- **Separator** - Visual dividers and section breaks
+
+### Form Components
+Interactive elements for user input and data collection:
+
+- **Button** - Primary actions and variants
+- **Input** - Text inputs with validation states
+- **Select** - Dropdown selection with search
+- **Checkbox** - Boolean selection controls
+- **Label** - Form field labels with proper associations
+
+### Navigation Components
+Components for app navigation and wayfinding:
+
+- **Navigation Menu** - App-level navigation with dropdowns
+- **Tabs** - Content organization and switching
+- **Breadcrumb** - Hierarchical navigation trails
+- **Pagination** - Large dataset navigation
+
+### Feedback Components
+Components for displaying status and providing feedback:
+
+- **Alert** - Important messages and notifications
+- **Badge** - Inline status indicators and metadata
+- **Progress** - Task completion and loading states
+- **Toast** - Temporary notification messages
+
+### Overlay Components
+Modal and overlay components for focused interactions:
+
+- **Dialog** - Modal dialogs for focused tasks
+- **Popover** - Contextual information overlays
+- **Tooltip** - Helpful hints and explanations
+- **Sheet** - Slide-over panels and drawers
+
+### Data Display Components
+Components for presenting information and data:
+
+- **Card** - Content containers and groupings
+- **Table** - Structured data presentation
+- **Chart** - Data visualization components
+- **Avatar** - User profile representations
+
+## Usage Patterns
+
+### Composition
+Components are designed to work together seamlessly:
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>User Profile</CardTitle>
+    <CardDescription>Manage your account settings</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      <div className="flex items-center space-x-4">
+        <Avatar>
+          <AvatarImage src="/avatar.jpg" />
+          <AvatarFallback>JD</AvatarFallback>
+        </Avatar>
+        <div>
+          <Label htmlFor="name">Display Name</Label>
+          <Input id="name" defaultValue="John Doe" />
+        </div>
+      </div>
+    </div>
+  </CardContent>
+  <CardFooter>
+    <Button>Save Changes</Button>
+  </CardFooter>
+</Card>
+```
+
+### Variants
+Most components support multiple variants for different contexts:
+
+```tsx
+{/* Button variants */}
+<Button variant="default">Primary Action</Button>
+<Button variant="secondary">Secondary Action</Button>
+<Button variant="outline">Outline Style</Button>
+<Button variant="ghost">Minimal Style</Button>
+
+{/* Size variants */}
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+```
+
+### State Management
+Components handle their own state while allowing external control:
+
+```tsx
+// Controlled component
+const [open, setOpen] = useState(false)
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogTrigger asChild>
+    <Button>Open Dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Confirmation</DialogTitle>
+    </DialogHeader>
+    <DialogFooter>
+      <Button onClick={() => setOpen(false)}>Close</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+## Installation
+
+Components can be installed individually or in groups:
+
+```bash
+# Install individual components
+npx dedevs-ui add button input card
+
+# Install by category
+npx dedevs-ui add form-components
+npx dedevs-ui add navigation-components
+npx dedevs-ui add feedback-components
+```
+
+## Component Structure
+
+Each component follows a consistent structure:
+
+```
+components/ui/button/
+├── button.tsx          # Main component
+├── button.stories.tsx  # Storybook stories
+├── button.test.tsx     # Unit tests
+└── index.ts           # Exports
+```
+
+## Customization
+
+Components can be customized through:
+
+- **CSS Variables** - Theme-level customization
+- **Tailwind Classes** - Utility-based styling
+- **Variant Props** - Built-in style variations
+- **Custom Props** - Component-specific options
+
+```tsx
+// Theme customization
+:root {
+  --primary: 142 76% 36%; /* Custom green */
+}
+
+// Utility customization
+<Button className="bg-gradient-to-r from-blue-500 to-purple-600">
+  Gradient Button
+</Button>
+
+// Variant customization
+<Button variant="destructive" size="lg">
+  Delete Account
+</Button>
+```
+
+## Best Practices
+
+### Accessibility
+- All components include proper ARIA attributes
+- Keyboard navigation is fully supported
+- Screen reader compatibility is tested
+- Color contrast meets WCAG AA standards
+
+### Performance
+- Components are tree-shakable
+- Minimal runtime dependencies
+- Optimized re-rendering patterns
+- Lazy loading for heavy components
+
+### Consistency
+- Follow established naming conventions
+- Use semantic HTML elements
+- Maintain visual hierarchy
+- Apply consistent spacing
+
+## Next Steps
+
+- Browse individual component documentation
+- Check out domain-specific implementation guides
+- Review accessibility testing strategies
+- Explore theming and customization options
+
+Each component page includes detailed API documentation, usage examples, accessibility notes, and implementation guidelines.

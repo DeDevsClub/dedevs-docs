@@ -1,0 +1,512 @@
+---
+title: AI Interface Patterns
+description: Specialized components and patterns for building AI-powered interfaces, conversation UIs, and intelligent applications.
+---
+
+# AI Interface Patterns
+
+AI interfaces require specialized patterns to handle real-time interactions, streaming responses, conversation flows, and complex data visualization. This guide covers the essential components and patterns for building effective AI applications.
+
+## Core AI Components
+
+### Conversation Interface
+
+The foundation of most AI applications is the conversation interface:
+
+```tsx
+import { AIConversation, AIInput, AIMessageList, AISourceAttribution } from '@/components/ai'
+
+export function ChatInterface() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isStreaming, setIsStreaming] = useState(false)
+
+  const handleSend = async (content: string) => {
+    const userMessage = { id: uuid(), role: 'user', content, timestamp: new Date() }
+    setMessages(prev => [...prev, userMessage])
+    
+    setIsStreaming(true)
+    const response = await streamAIResponse(content)
+    // Handle streaming response...
+  }
+
+  return (
+    <AIConversation className="h-full flex flex-col">
+      <AIMessageList 
+        messages={messages}
+        isStreaming={isStreaming}
+        className="flex-1 overflow-y-auto"
+      />
+      <AIInput 
+        onSend={handleSend}
+        disabled={isStreaming}
+        placeholder="Ask me anything..."
+      />
+    </AIConversation>
+  )
+}
+```
+
+### Message Components
+
+Individual message components with role-based styling:
+
+```tsx
+// User message
+<AIMessage role="user" timestamp={message.timestamp}>
+  {message.content}
+</AIMessage>
+
+// Assistant message with streaming support
+<AIMessage 
+  role="assistant" 
+  isStreaming={isStreaming}
+  sources={message.sources}
+>
+  {message.content}
+</AIMessage>
+
+// System message for status updates
+<AIMessage role="system" variant="info">
+  Processing your request...
+</AIMessage>
+```
+
+### Streaming Response Handler
+
+Handle real-time text generation:
+
+```tsx
+export function StreamingMessage({ content, isComplete }: StreamingMessageProps) {
+  const [displayedContent, setDisplayedContent] = useState('')
+  const [cursor, setCursor] = useState(true)
+
+  useEffect(() => {
+    if (!content) return
+    
+    let index = 0
+    const timer = setInterval(() => {
+      if (index < content.length) {
+        setDisplayedContent(content.slice(0, index + 1))
+        index++
+      } else {
+        clearInterval(timer)
+        setCursor(false)
+      }
+    }, 20) // Typing speed
+
+    return () => clearInterval(timer)
+  }, [content])
+
+  return (
+    <div className="relative">
+      <ReactMarkdown>{displayedContent}</ReactMarkdown>
+      {!isComplete && cursor && (
+        <span className="animate-pulse">|</span>
+      )}
+    </div>
+  )
+}
+```
+
+## Advanced AI Patterns
+
+### Source Attribution
+
+Link AI responses to their sources:
+
+```tsx
+export function AISourceAttribution({ sources }: { sources: Source[] }) {
+  return (
+    <div className="mt-4 border-t pt-3">
+      <h4 className="text-sm font-medium text-muted-foreground mb-2">Sources</h4>
+      <div className="space-y-2">
+        {sources.map((source, index) => (
+          <div key={source.id} className="flex items-start gap-2 text-sm">
+            <Badge variant="outline" className="shrink-0">
+              {index + 1}
+            </Badge>
+            <div>
+              <a 
+                href={source.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-medium hover:underline"
+              >
+                {source.title}
+              </a>
+              <p className="text-muted-foreground text-xs mt-1">
+                {source.excerpt}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+### Reasoning Visualization
+
+Display AI thinking processes:
+
+```tsx
+export function AIReasoningPanel({ reasoning }: { reasoning: ReasoningStep[] }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  return (
+    <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+      <CollapsibleTrigger asChild>
+        <Button variant="ghost" size="sm" className="w-full justify-between">
+          <span className="flex items-center gap-2">
+            <Brain className="h-4 w-4" />
+            Show reasoning ({reasoning.length} steps)
+          </span>
+          <ChevronDown className={cn(
+            "h-4 w-4 transition-transform",
+            isExpanded && "rotate-180"
+          )} />
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="space-y-2 mt-2">
+        {reasoning.map((step, index) => (
+          <div key={index} className="border-l-2 border-muted pl-4 py-2">
+            <div className="flex items-center gap-2 text-sm font-medium">
+              <Badge variant="secondary">{index + 1}</Badge>
+              {step.type}
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              {step.description}
+            </p>
+          </div>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+```
+
+### Context Management
+
+Handle conversation context and memory:
+
+```tsx
+export function AIContextManager({ 
+  context, 
+  onContextUpdate 
+}: AIContextManagerProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Memory className="h-4 w-4" />
+          Conversation Context
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div>
+          <Label>Active Topics</Label>
+          <div className="flex flex-wrap gap-1 mt-1">
+            {context.topics.map(topic => (
+              <Badge key={topic} variant="outline">{topic}</Badge>
+            ))}
+          </div>
+        </div>
+        <div>
+          <Label>Memory Items</Label>
+          <div className="text-sm text-muted-foreground">
+            {context.memoryItems.length} items remembered
+          </div>
+        </div>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={() => onContextUpdate({ ...context, topics: [], memoryItems: [] })}
+        >
+          Clear Context
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Input Patterns
+
+### Enhanced AI Input
+
+Input component with AI-specific features:
+
+```tsx
+export function AIInput({ 
+  onSend, 
+  disabled = false,
+  suggestions = [],
+  placeholder = "Type your message..."
+}: AIInputProps) {
+  const [input, setInput] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (input.trim() && !disabled) {
+      onSend(input.trim())
+      setInput('')
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="relative">
+      <div className="flex gap-2 p-4 border-t">
+        <div className="relative flex-1">
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={placeholder}
+            disabled={disabled}
+            className="min-h-[60px] resize-none pr-12"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                handleSubmit(e)
+              }
+            }}
+          />
+          <Button
+            type="submit"
+            size="sm"
+            disabled={!input.trim() || disabled}
+            className="absolute bottom-2 right-2"
+          >
+            <Send className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute bottom-full left-0 right-0 bg-popover border rounded-md shadow-md p-2 space-y-1">
+          {suggestions.map((suggestion, index) => (
+            <Button
+              key={index}
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start text-left"
+              onClick={() => {
+                setInput(suggestion)
+                setShowSuggestions(false)
+              }}
+            >
+              {suggestion}
+            </Button>
+          ))}
+        </div>
+      )}
+    </form>
+  )
+}
+```
+
+### Voice Input Integration
+
+Add voice input capabilities:
+
+```tsx
+export function VoiceInput({ onTranscript }: { onTranscript: (text: string) => void }) {
+  const [isRecording, setIsRecording] = useState(false)
+  const [transcript, setTranscript] = useState('')
+
+  const startRecording = async () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('Speech recognition not supported')
+      return
+    }
+
+    const recognition = new (window as any).webkitSpeechRecognition()
+    recognition.continuous = true
+    recognition.interimResults = true
+
+    recognition.onstart = () => setIsRecording(true)
+    recognition.onend = () => setIsRecording(false)
+    
+    recognition.onresult = (event: any) => {
+      const current = event.resultIndex
+      const transcript = event.results[current][0].transcript
+      
+      if (event.results[current].isFinal) {
+        onTranscript(transcript)
+        setTranscript('')
+      } else {
+        setTranscript(transcript)
+      }
+    }
+
+    recognition.start()
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Button
+        variant={isRecording ? "destructive" : "outline"}
+        size="sm"
+        onClick={startRecording}
+      >
+        <Mic className="h-4 w-4" />
+        {isRecording ? 'Recording...' : 'Voice'}
+      </Button>
+      {transcript && (
+        <span className="text-sm text-muted-foreground italic">
+          {transcript}
+        </span>
+      )}
+    </div>
+  )
+}
+```
+
+## Data Visualization
+
+### AI Response Charts
+
+Visualize AI-generated data:
+
+```tsx
+export function AIDataVisualization({ data, type }: AIDataVisualizationProps) {
+  switch (type) {
+    case 'bar':
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="value" fill="hsl(var(--primary))" />
+          </BarChart>
+        </ResponsiveContainer>
+      )
+    
+    case 'line':
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Line 
+              type="monotone" 
+              dataKey="value" 
+              stroke="hsl(var(--primary))" 
+              strokeWidth={2}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      )
+    
+    default:
+      return <div>Unsupported chart type</div>
+  }
+}
+```
+
+## Accessibility Considerations
+
+### Screen Reader Support
+
+```tsx
+// Announce new messages
+<div aria-live="polite" aria-atomic="true">
+  {newMessage && (
+    <span className="sr-only">
+      New message from {newMessage.role}: {newMessage.content}
+    </span>
+  )}
+</div>
+
+// Conversation history
+<div role="log" aria-label="Conversation history">
+  {messages.map(message => (
+    <div key={message.id} role="article">
+      <div aria-label={`Message from ${message.role}`}>
+        {message.content}
+      </div>
+    </div>
+  ))}
+</div>
+```
+
+### Keyboard Navigation
+
+```tsx
+// Focus management for conversation
+const conversationRef = useRef<HTMLDivElement>(null)
+
+useEffect(() => {
+  if (newMessage && conversationRef.current) {
+    // Scroll to new message
+    conversationRef.current.scrollTop = conversationRef.current.scrollHeight
+  }
+}, [messages])
+
+// Keyboard shortcuts
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === '/' && e.ctrlKey) {
+      e.preventDefault()
+      inputRef.current?.focus()
+    }
+  }
+
+  document.addEventListener('keydown', handleKeyDown)
+  return () => document.removeEventListener('keydown', handleKeyDown)
+}, [])
+```
+
+## Performance Optimization
+
+### Message Virtualization
+
+For long conversations:
+
+```tsx
+import { FixedSizeList as List } from 'react-window'
+
+export function VirtualizedMessageList({ messages }: { messages: Message[] }) {
+  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => (
+    <div style={style}>
+      <AIMessage message={messages[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={messages.length}
+      itemSize={100}
+      className="scrollbar-thin"
+    >
+      {Row}
+    </List>
+  )
+}
+```
+
+### Streaming Optimization
+
+```tsx
+// Debounced streaming updates
+const debouncedUpdate = useMemo(
+  () => debounce((content: string) => {
+    setStreamingContent(content)
+  }, 50),
+  []
+)
+
+useEffect(() => {
+  if (streamingData) {
+    debouncedUpdate(streamingData)
+  }
+}, [streamingData, debouncedUpdate])
+```
+
+These patterns provide a solid foundation for building sophisticated AI interfaces that are accessible, performant, and user-friendly.

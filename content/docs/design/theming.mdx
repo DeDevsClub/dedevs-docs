@@ -1,0 +1,398 @@
+---
+title: Theming
+description: Comprehensive guide to customizing themes, CSS variables, and creating custom color schemes in the DeDevs UI Design System.
+---
+
+# Theming
+
+The DeDevs UI Design System uses CSS custom properties (variables) to enable powerful theming capabilities. This approach allows you to customize the entire visual appearance while maintaining consistency and accessibility across all components.
+
+## Theme Architecture
+
+### CSS Variables Foundation
+
+All theme values are defined as CSS custom properties using HSL color space for maximum flexibility:
+
+```css
+:root {
+  /* Light theme */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  /* ... more variables */
+}
+
+[data-theme="dark"] {
+  /* Dark theme */
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 84% 4.9%;
+  /* ... more variables */
+}
+```
+
+### Theme Switching
+
+The system automatically switches between light and dark themes based on:
+- User preference (via theme toggle)
+- System preference (`prefers-color-scheme`)
+- Programmatic control
+
+## Creating Custom Themes
+
+### Method 1: CSS Variable Override
+
+Override specific variables in your global CSS:
+
+```css
+/* Custom brand theme */
+:root {
+  --primary: 142 76% 36%; /* Custom green */
+  --primary-foreground: 355 100% 97%;
+  --secondary: 142 76% 36%;
+  --secondary-foreground: 355 100% 97%;
+}
+
+[data-theme="dark"] {
+  --primary: 142 84% 44%;
+  --primary-foreground: 355 100% 97%;
+  --secondary: 142 84% 44%;
+  --secondary-foreground: 355 100% 97%;
+}
+```
+
+### Method 2: Tailwind Configuration
+
+Extend your `tailwind.config.ts` to customize the color palette:
+
+```typescript
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  theme: {
+    extend: {
+      colors: {
+        // Custom color scheme
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        // Brand-specific colors
+        brand: {
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          500: '#0ea5e9',
+          900: '#0c4a6e',
+        }
+      }
+    }
+  }
+}
+```
+
+### Method 3: Theme Objects
+
+Define complete theme objects for programmatic theme switching:
+
+```typescript
+// themes/custom.ts
+export const customTheme = {
+  light: {
+    background: '0 0% 100%',
+    foreground: '222.2 84% 4.9%',
+    primary: '142 76% 36%',
+    'primary-foreground': '355 100% 97%',
+    secondary: '210 40% 96%',
+    'secondary-foreground': '222.2 84% 4.9%',
+    // ... complete theme definition
+  },
+  dark: {
+    background: '222.2 84% 4.9%',
+    foreground: '210 40% 98%',
+    primary: '142 84% 44%',
+    'primary-foreground': '355 100% 97%',
+    // ... complete dark theme
+  }
+}
+```
+
+## Domain-Specific Themes
+
+### AI Interface Theme
+
+Optimized for AI applications with emphasis on conversation flows:
+
+```css
+:root {
+  /* AI Theme - Focus on readability and conversation */
+  --primary: 217 91% 60%; /* Blue for AI responses */
+  --secondary: 142 71% 45%; /* Green for user messages */
+  --accent: 262 83% 58%; /* Purple for system messages */
+  --muted: 217 32% 17%; /* Dark background for code */
+  --success: 142 76% 36%; /* Success states */
+  --warning: 38 92% 50%; /* Warning states */
+}
+```
+
+### Blockchain/Web3 Theme
+
+Designed for DeFi and Web3 applications:
+
+```css
+:root {
+  /* Web3 Theme - Trust and security focused */
+  --primary: 142 76% 36%; /* Green for positive actions */
+  --secondary: 217 91% 60%; /* Blue for neutral actions */
+  --accent: 45 93% 47%; /* Gold for premium features */
+  --destructive: 0 84% 60%; /* Red for high-risk actions */
+  --success: 142 76% 36%; /* Transaction success */
+  --warning: 38 92% 50%; /* Transaction warnings */
+}
+```
+
+### Portfolio Theme
+
+Professional theme for developer portfolios:
+
+```css
+:root {
+  /* Portfolio Theme - Professional and clean */
+  --primary: 222 84% 5%; /* Dark professional */
+  --secondary: 210 40% 96%; /* Light neutral */
+  --accent: 217 91% 60%; /* Blue for links */
+  --muted: 210 40% 96%; /* Subtle backgrounds */
+  --border: 214 32% 91%; /* Clean borders */
+}
+```
+
+## Advanced Theming
+
+### Component-Specific Theming
+
+Target specific components with scoped CSS variables:
+
+```css
+/* Custom button theme */
+.btn-custom {
+  --btn-primary: 142 76% 36%;
+  --btn-primary-foreground: 355 100% 97%;
+  --btn-secondary: 210 40% 96%;
+  --btn-secondary-foreground: 222.2 84% 4.9%;
+}
+
+/* Custom card theme */
+.card-highlight {
+  --card-background: 142 76% 96%;
+  --card-border: 142 76% 86%;
+  --card-foreground: 142 76% 16%;
+}
+```
+
+### Dynamic Theme Generation
+
+Create themes programmatically based on user preferences:
+
+```typescript
+// utils/theme-generator.ts
+export function generateTheme(baseColor: string, mode: 'light' | 'dark') {
+  const hsl = hexToHsl(baseColor)
+  
+  return {
+    primary: `${hsl.h} ${hsl.s}% ${mode === 'light' ? hsl.l : hsl.l + 10}%`,
+    'primary-foreground': mode === 'light' ? '0 0% 98%' : '222.2 84% 4.9%',
+    secondary: `${hsl.h} ${hsl.s * 0.3}% ${mode === 'light' ? 96 : 14}%`,
+    // ... generate complete theme
+  }
+}
+```
+
+### Theme Validation
+
+Ensure accessibility compliance for custom themes:
+
+```typescript
+// utils/theme-validator.ts
+export function validateThemeContrast(theme: ThemeColors) {
+  const results = []
+  
+  // Check primary contrast
+  const primaryContrast = getContrastRatio(
+    theme.primary, 
+    theme['primary-foreground']
+  )
+  
+  if (primaryContrast < 4.5) {
+    results.push({
+      level: 'error',
+      message: 'Primary color contrast ratio below WCAG AA standard'
+    })
+  }
+  
+  return results
+}
+```
+
+## Theme Implementation
+
+### React Context
+
+Implement theme switching with React Context:
+
+```tsx
+// contexts/theme-context.tsx
+'use client'
+
+import { createContext, useContext, useEffect, useState } from 'react'
+
+type Theme = 'light' | 'dark' | 'system'
+
+interface ThemeContextType {
+  theme: Theme
+  setTheme: (theme: Theme) => void
+  actualTheme: 'light' | 'dark'
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>('system')
+  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
+
+  useEffect(() => {
+    const root = window.document.documentElement
+    
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark' : 'light'
+      setActualTheme(systemTheme)
+      root.setAttribute('data-theme', systemTheme)
+    } else {
+      setActualTheme(theme)
+      root.setAttribute('data-theme', theme)
+    }
+  }, [theme])
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme, actualTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  )
+}
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext)
+  if (!context) throw new Error('useTheme must be used within ThemeProvider')
+  return context
+}
+```
+
+### Theme Toggle Component
+
+Create a theme switcher component:
+
+```tsx
+// components/theme-toggle.tsx
+'use client'
+
+import { Moon, Sun, Monitor } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { useTheme } from '@/contexts/theme-context'
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          <Sun className="mr-2 h-4 w-4" />
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          <Moon className="mr-2 h-4 w-4" />
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>
+          <Monitor className="mr-2 h-4 w-4" />
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+```
+
+## Best Practices
+
+### Color Selection
+- Use HSL color space for better manipulation
+- Maintain consistent saturation levels across related colors
+- Test colors in both light and dark modes
+
+### Accessibility
+- Ensure minimum 4.5:1 contrast ratio for normal text
+- Ensure minimum 3:1 contrast ratio for large text
+- Provide alternative indicators beyond color
+
+### Performance
+- Limit the number of CSS custom properties
+- Use CSS custom properties for frequently changing values
+- Avoid inline styles for theme values
+
+### Maintenance
+- Document custom theme variables
+- Use semantic naming conventions
+- Version control theme configurations
+- Test themes across all components
+
+## Migration Guide
+
+### From Hardcoded Colors
+
+Replace hardcoded color values with CSS custom properties:
+
+```css
+/* Before */
+.button {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* After */
+.button {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+```
+
+### From Other Theme Systems
+
+Convert existing theme configurations to CSS custom properties:
+
+```typescript
+// Convert from styled-components theme
+const convertTheme = (styledTheme: any) => {
+  return {
+    '--primary': convertToHsl(styledTheme.colors.primary),
+    '--secondary': convertToHsl(styledTheme.colors.secondary),
+    // ... convert all theme values
+  }
+}
+```
+
+The theming system provides maximum flexibility while maintaining consistency and accessibility across all components and application domains.

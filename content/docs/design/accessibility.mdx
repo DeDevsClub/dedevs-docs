@@ -1,0 +1,423 @@
+---
+title: Accessibility
+description: Comprehensive accessibility guidelines and testing strategies for the DeDevs UI Design System.
+---
+
+# Accessibility
+
+Accessibility is a core principle of the DeDevs UI Design System. Every component is built to meet WCAG 2.1 AA standards, ensuring your applications are usable by everyone, including users with disabilities.
+
+## WCAG Compliance
+
+### Level AA Standards
+
+All components meet WCAG 2.1 Level AA requirements:
+
+- **Perceivable** - Information must be presentable in ways users can perceive
+- **Operable** - Interface components must be operable by all users
+- **Understandable** - Information and UI operation must be understandable
+- **Robust** - Content must be robust enough for various assistive technologies
+
+### Color Contrast
+
+Minimum contrast ratios are enforced across all themes:
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+  <div className="space-y-4">
+    <h4 className="font-semibold">Normal Text</h4>
+    <div className="p-4 bg-background border rounded-lg">
+      <div className="text-foreground">Regular text requires 4.5:1 contrast ratio</div>
+      <div className="text-sm text-muted-foreground mt-2">✓ Passes WCAG AA</div>
+    </div>
+  </div>
+  <div className="space-y-4">
+    <h4 className="font-semibold">Large Text</h4>
+    <div className="p-4 bg-background border rounded-lg">
+      <div className="text-xl text-foreground">Large text requires 3:1 contrast ratio</div>
+      <div className="text-sm text-muted-foreground mt-2">✓ Passes WCAG AA</div>
+    </div>
+  </div>
+</div>
+
+### Testing Tools
+
+Use these tools to verify contrast compliance:
+
+```bash
+# Install accessibility testing tools
+npm install --save-dev @axe-core/react jest-axe
+```
+
+## Keyboard Navigation
+
+### Focus Management
+
+All interactive elements support keyboard navigation:
+
+- **Tab** - Navigate forward through interactive elements
+- **Shift + Tab** - Navigate backward through interactive elements
+- **Enter/Space** - Activate buttons and links
+- **Escape** - Close modals, dropdowns, and overlays
+- **Arrow keys** - Navigate within component groups
+
+### Focus Indicators
+
+Visual focus indicators are provided for all interactive elements:
+
+```css
+/* Focus ring styles */
+.focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Custom focus styles for specific components */
+.btn:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+```
+
+### Focus Trapping
+
+Modal dialogs and overlays implement focus trapping:
+
+```tsx
+// Example focus trap implementation
+import { useFocusTrap } from '@/hooks/use-focus-trap'
+
+export function Dialog({ children, open }: DialogProps) {
+  const trapRef = useFocusTrap(open)
+  
+  return (
+    <div ref={trapRef} role="dialog" aria-modal="true">
+      {children}
+    </div>
+  )
+}
+```
+
+## Screen Reader Support
+
+### ARIA Labels and Roles
+
+Components include appropriate ARIA attributes:
+
+```tsx
+// Button with accessible label
+<Button aria-label="Close dialog">
+  <X className="h-4 w-4" />
+</Button>
+
+// Form field with description
+<div>
+  <Label htmlFor="email">Email Address</Label>
+  <Input 
+    id="email" 
+    aria-describedby="email-help"
+    aria-required="true"
+  />
+  <div id="email-help">We'll never share your email</div>
+</div>
+
+// Navigation with landmarks
+<nav aria-label="Main navigation">
+  <ul role="list">
+    <li><a href="/docs">Documentation</a></li>
+    <li><a href="/components">Components</a></li>
+  </ul>
+</nav>
+```
+
+### Live Regions
+
+Dynamic content updates are announced to screen readers:
+
+```tsx
+// Status announcements
+<div aria-live="polite" aria-atomic="true">
+  {status && <span>{status}</span>}
+</div>
+
+// Error announcements
+<div aria-live="assertive" role="alert">
+  {error && <span>{error}</span>}
+</div>
+```
+
+### Semantic HTML
+
+Components use semantic HTML elements:
+
+```tsx
+// Proper heading hierarchy
+<article>
+  <h1>Main Article Title</h1>
+  <section>
+    <h2>Section Title</h2>
+    <p>Content...</p>
+  </section>
+</article>
+
+// Form structure
+<form>
+  <fieldset>
+    <legend>Contact Information</legend>
+    <div>
+      <label htmlFor="name">Name</label>
+      <input id="name" type="text" required />
+    </div>
+  </fieldset>
+</form>
+```
+
+## Domain-Specific Accessibility
+
+### AI Interface Accessibility
+
+Special considerations for AI applications:
+
+```tsx
+// Conversation accessibility
+<div role="log" aria-live="polite" aria-label="Conversation history">
+  {messages.map(message => (
+    <div key={message.id} role="article">
+      <div aria-label={`Message from ${message.sender}`}>
+        {message.content}
+      </div>
+    </div>
+  ))}
+</div>
+
+// Streaming response accessibility
+<div aria-live="polite" aria-busy={isStreaming}>
+  {streamingContent}
+</div>
+```
+
+### Blockchain/Web3 Accessibility
+
+Accessibility for financial interfaces:
+
+```tsx
+// Transaction status with clear labeling
+<div role="status" aria-live="polite">
+  <span className="sr-only">Transaction status:</span>
+  <span aria-label={`Transaction ${status}`}>
+    {status === 'pending' && 'Processing...'}
+    {status === 'success' && 'Completed successfully'}
+    {status === 'failed' && 'Failed - please try again'}
+  </span>
+</div>
+
+// Wallet balance with currency information
+<div>
+  <span className="sr-only">Account balance:</span>
+  <span aria-label={`${balance} ${currency}`}>
+    {formatCurrency(balance, currency)}
+  </span>
+</div>
+```
+
+### Portfolio Accessibility
+
+Professional presentation accessibility:
+
+```tsx
+// Project showcase with proper structure
+<section aria-labelledby="projects-heading">
+  <h2 id="projects-heading">Featured Projects</h2>
+  {projects.map(project => (
+    <article key={project.id}>
+      <h3>{project.title}</h3>
+      <p>{project.description}</p>
+      <div role="list" aria-label="Technologies used">
+        {project.technologies.map(tech => (
+          <span key={tech} role="listitem">{tech}</span>
+        ))}
+      </div>
+    </article>
+  ))}
+</section>
+```
+
+## Testing Strategies
+
+### Automated Testing
+
+Integrate accessibility testing into your development workflow:
+
+```typescript
+// jest-axe testing
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { render } from '@testing-library/react'
+
+expect.extend(toHaveNoViolations)
+
+test('Button component has no accessibility violations', async () => {
+  const { container } = render(<Button>Click me</Button>)
+  const results = await axe(container)
+  expect(results).toHaveNoViolations()
+})
+```
+
+### Manual Testing Checklist
+
+#### Keyboard Testing
+- [ ] All interactive elements are reachable via keyboard
+- [ ] Focus order is logical and intuitive
+- [ ] Focus indicators are visible and clear
+- [ ] No keyboard traps (except intentional focus trapping)
+
+#### Screen Reader Testing
+- [ ] Content is announced in logical order
+- [ ] Interactive elements have clear labels
+- [ ] Form fields have associated labels
+- [ ] Error messages are announced
+- [ ] Dynamic content updates are announced
+
+#### Visual Testing
+- [ ] Text meets contrast requirements
+- [ ] Focus indicators are visible
+- [ ] Content is readable when zoomed to 200%
+- [ ] Color is not the only indicator of meaning
+
+### Testing Tools
+
+#### Browser Extensions
+- **axe DevTools** - Automated accessibility testing
+- **WAVE** - Web accessibility evaluation
+- **Lighthouse** - Performance and accessibility auditing
+
+#### Screen Readers
+- **NVDA** (Windows) - Free screen reader for testing
+- **JAWS** (Windows) - Popular commercial screen reader
+- **VoiceOver** (macOS) - Built-in screen reader
+- **Orca** (Linux) - Open source screen reader
+
+#### Command Line Tools
+```bash
+# Pa11y for automated testing
+npm install -g pa11y
+pa11y http://localhost:3000
+
+# Lighthouse CI for continuous testing
+npm install -g @lhci/cli
+lhci autorun
+```
+
+## Implementation Guidelines
+
+### Component Development
+
+When creating new components:
+
+1. **Start with semantic HTML** - Use appropriate HTML elements
+2. **Add ARIA attributes** - Enhance semantics where needed
+3. **Implement keyboard support** - Handle all relevant key events
+4. **Test with screen readers** - Verify the experience works well
+5. **Validate color contrast** - Ensure sufficient contrast ratios
+
+### Code Examples
+
+#### Accessible Button Component
+
+```tsx
+interface ButtonProps {
+  children: React.ReactNode
+  onClick?: () => void
+  disabled?: boolean
+  'aria-label'?: string
+  'aria-describedby'?: string
+}
+
+export function Button({ 
+  children, 
+  onClick, 
+  disabled = false,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
+  ...props 
+}: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
+      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+#### Accessible Form Field
+
+```tsx
+interface FormFieldProps {
+  label: string
+  id: string
+  error?: string
+  help?: string
+  required?: boolean
+  children: React.ReactNode
+}
+
+export function FormField({ 
+  label, 
+  id, 
+  error, 
+  help, 
+  required = false, 
+  children 
+}: FormFieldProps) {
+  const helpId = help ? `${id}-help` : undefined
+  const errorId = error ? `${id}-error` : undefined
+  const describedBy = [helpId, errorId].filter(Boolean).join(' ')
+
+  return (
+    <div>
+      <label htmlFor={id} className="block text-sm font-medium">
+        {label}
+        {required && <span aria-label="required">*</span>}
+      </label>
+      
+      {React.cloneElement(children as React.ReactElement, {
+        id,
+        'aria-describedby': describedBy || undefined,
+        'aria-invalid': error ? 'true' : undefined,
+        'aria-required': required,
+      })}
+      
+      {help && (
+        <div id={helpId} className="text-sm text-muted-foreground">
+          {help}
+        </div>
+      )}
+      
+      {error && (
+        <div id={errorId} role="alert" className="text-sm text-destructive">
+          {error}
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+## Resources
+
+### Documentation
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [WebAIM Accessibility Resources](https://webaim.org/)
+
+### Testing Resources
+- [axe-core Documentation](https://github.com/dequelabs/axe-core)
+- [Testing Library Accessibility](https://testing-library.com/docs/guide-which-query/#priority)
+- [Accessibility Testing Tools](https://www.w3.org/WAI/test-evaluate/tools/)
+
+By following these accessibility guidelines, you ensure that your applications built with the DeDevs UI Design System are inclusive and usable by everyone.

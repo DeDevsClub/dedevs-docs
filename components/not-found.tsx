@@ -41,14 +41,6 @@ function generateItems() {
     },
     {
       id: "3",
-      title: `Vibes`,
-      description: `Explore DeDevs Vibes Guide.`,
-      url: `/docs/vibes`,
-      type: "vibes",
-      tags: ["vibes"],
-    },
-    {
-      id: "4",
       title: `Products`,
       description: `Explore DeDevs Products.`,
       url: `/docs/products`,
@@ -73,7 +65,7 @@ const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
         "border border-gray-200/80 dark:border-gray-700/60 bg-card dark:bg-neutral-900/50",
         "hover:shadow-lg hover:dark:shadow-neutral-800/50",
         "hover:-translate-y-0.5 will-change-transform",
-        "max-w-full sm:max-w-[calc(50%-0.5rem)]" // Adjusted for responsiveness, similar to bento.tsx
+        "max-w-full sm:max-w-[calc(50%-0.5rem)] lg:max-w-full" // Adjusted for responsiveness, similar to bento.tsx
       )}
       target={item.url.startsWith("http") ? "_blank" : "_self"}
     >
@@ -82,12 +74,12 @@ const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[length:4px_4px]" />
       </div>
 
-      <div className="relative flex flex-col space-y-3 w-full h-full">
+      <div className="relative grid grid-cols-1 space-y-3 w-full h-full">
         <div className="space-y-1 flex-grow">
           <h3 className="font-medium text-foreground tracking-tight text-[15px]">
             {item.title}
           </h3>
-          <p className="text-sm text-muted-foreground leading-snug font-[425]">
+          <p className="hidden md:block text-sm text-muted-foreground leading-snug font-[425]">
             {item.description}
           </p>
         </div>
@@ -128,11 +120,11 @@ const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
 export const NotFound = () => {
   const items = generateItems();
   return (
-    <div className="container mx-auto px-4 py-18 flex flex-col items-center">
+    <div className="mx-auto grid grid-cols-1 items-center w-full h-full overflow-x-hidden">
       {/* Adapted from bento.tsx's grid structure */}
-      <div className="mx-auto flex flex-wrap w-full gap-4 py-8 items-stretch justify-center">
-        {items.map((item) => (
-          <BentoItemCard key={item.id} item={item} />
+      <div className="flex flex-cols w-full gap-4 py-8 justify-center px-6">
+        {items.map((item, index) => (
+          <BentoItemCard key={index} item={item} />
         ))}
       </div>
     </div>
