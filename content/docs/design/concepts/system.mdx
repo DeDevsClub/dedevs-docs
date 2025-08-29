@@ -1,4 +1,188 @@
 ---
 title: Design System
-description: Learn about DeDevs Design System.
+description: Learn about the DeDevs UI Design System architecture, principles, and implementation patterns.
 ---
+
+# Design System
+
+The DeDevs UI Design System is a comprehensive framework that powers the Design Registry, providing a cohesive foundation for building modern web applications across AI interfaces, blockchain/Web3 applications, and developer portfolios.
+
+## System Architecture
+
+### Foundation Layer
+The design system is built on proven, industry-standard foundations:
+
+- **Tailwind CSS** - Utility-first CSS framework for rapid styling and consistent design tokens
+- **Radix UI** - Headless, accessible component primitives that ensure WCAG compliance
+- **shadcn/ui** - Base component library providing foundational UI patterns
+- **TypeScript** - Full type safety and enhanced developer experience
+
+### Component Hierarchy
+
+```
+DeDevs UI Design System
+├── Primitives (Radix UI)
+├── Base Components (shadcn/ui)
+├── Extended Components (DeDevs UI)
+└── Specialized Components (Design Registry)
+    ├── AI Interface Components
+    ├── Blockchain/Web3 Components
+    └── Portfolio Components
+```
+
+## Design Tokens
+
+The system uses CSS custom properties for consistent theming across all components:
+
+### Color System
+- **Semantic colors** - Primary, secondary, accent, destructive
+- **Neutral palette** - Background, foreground, muted, border
+- **State colors** - Success, warning, error, info
+- **Mode support** - Automatic light/dark theme switching
+
+### Typography Scale
+- **Font families** - System fonts with fallbacks for optimal performance
+- **Type scale** - Harmonious sizing from `text-xs` to `text-4xl`
+- **Line heights** - Optimized for readability across different content types
+
+### Spacing & Layout
+- **Consistent spacing** - Based on `0.25rem` increments for visual rhythm
+- **Responsive breakpoints** - Mobile-first approach with standard breakpoints
+- **Grid systems** - Flexible layouts for different application types
+
+## Component Patterns
+
+### Composition Over Configuration
+Components follow a composable architecture where complex interfaces are built by combining simpler pieces:
+
+```tsx
+// AI Interface Example
+<AIConversation>
+  <AIInput onSend={handleSend} />
+  <AIMessageList messages={messages} />
+  <AISourceAttribution sources={sources} />
+</AIConversation>
+
+// Blockchain Example  
+<Web3Dashboard>
+  <WalletConnect onConnect={handleConnect} />
+  <TokenBalance address={address} />
+  <TransactionHistory transactions={txs} />
+</Web3Dashboard>
+```
+
+### Accessibility First
+Every component implements:
+- **Keyboard navigation** - Full keyboard accessibility
+- **Screen reader support** - Proper ARIA labels and roles
+- **Focus management** - Logical tab order and focus trapping
+- **Color contrast** - WCAG AA compliant color combinations
+- **Motion preferences** - Respects `prefers-reduced-motion`
+
+### Performance Optimization
+- **Tree-shakable** - Only bundle components you actually use
+- **Minimal runtime** - Lightweight components with efficient rendering
+- **Code splitting** - Heavy components can be lazy-loaded
+- **CSS optimization** - Tailwind purges unused styles
+
+## Theming System
+
+### CSS Variables
+The system uses CSS custom properties for dynamic theming:
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  /* ... */
+}
+
+[data-theme="dark"] {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  /* ... */
+}
+```
+
+### Theme Customization
+Themes can be customized through:
+- **CSS variable overrides** - Direct customization of design tokens
+- **Tailwind configuration** - Extend or modify the utility classes
+- **Component variants** - Use `class-variance-authority` for component variations
+
+## Domain-Specific Patterns
+
+### AI Interface Patterns
+- **Streaming responses** - Handle real-time text generation
+- **Message threading** - Conversation history management
+- **Source attribution** - Link responses to original sources
+- **Reasoning visualization** - Display AI thinking processes
+
+### Blockchain/Web3 Patterns
+- **Wallet integration** - Connect to various wallet providers
+- **Transaction states** - Pending, confirmed, failed states
+- **Token displays** - Balances, prices, and metadata
+- **Network switching** - Handle multiple blockchain networks
+
+### Portfolio Patterns
+- **Project showcases** - Image galleries and case studies
+- **Skill matrices** - Visual skill representations
+- **Contact forms** - Professional inquiry handling
+- **Code snippets** - Syntax-highlighted code examples
+
+## Implementation Guidelines
+
+### Component Development
+When creating new components:
+
+1. **Start with accessibility** - Use Radix primitives when possible
+2. **Follow naming conventions** - Use clear, descriptive component names
+3. **Implement variants** - Use `cva` for consistent variant patterns
+4. **Add TypeScript types** - Provide comprehensive prop interfaces
+5. **Include documentation** - Add JSDoc comments and usage examples
+
+### Styling Approach
+- **Utility-first** - Use Tailwind utilities for styling
+- **Component-scoped** - Avoid global CSS modifications
+- **Responsive design** - Mobile-first responsive patterns
+- **Theme-aware** - Use CSS variables for themeable properties
+
+### Testing Strategy
+- **Accessibility testing** - Automated a11y checks with jest-axe
+- **Visual regression** - Chromatic for component visual testing
+- **Interaction testing** - Testing Library for user interactions
+- **Type checking** - TypeScript for compile-time error detection
+
+## CLI Integration
+
+The DeDevs UI CLI provides seamless component installation:
+
+```bash
+# Install individual components
+npx dedevs-ui add button card dialog
+
+# Install domain-specific collections
+npx dedevs-ui add ai-conversation
+npx dedevs-ui add wallet-connect
+npx dedevs-ui add project-showcase
+```
+
+Components are installed directly into your project, giving you full control over customization and ensuring you only ship the code you actually use.
+
+## Best Practices
+
+### Performance
+- **Lazy load heavy components** - Use React.lazy for large components
+- **Optimize re-renders** - Use React.memo and useMemo appropriately
+- **Bundle analysis** - Regular bundle size monitoring
+- **Image optimization** - Use Next.js Image component for media
+
+### Maintainability
+- **Consistent patterns** - Follow established component patterns
+- **Documentation** - Keep component docs up to date
+- **Version management** - Use semantic versioning for updates
+- **Deprecation strategy** - Gradual migration paths for breaking changes
+
+The DeDevs UI Design System provides a robust foundation that scales from simple interfaces to complex, domain-specific applications while maintaining consistency, accessibility, and performance across all use cases.

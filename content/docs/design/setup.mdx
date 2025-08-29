@@ -1,0 +1,70 @@
+---
+title: Setup
+description: How to install and set up DeDevs UI Design Registry components for modern web applications
+---
+
+import { Installer } from "@/components/markdown/installer";
+
+Installing the DeDevs UI Design Registry is straightforward and can be done in a couple of ways. You can use the dedicated DeDevs UI CLI for the fastest setup, or integrate via the standard shadcn/ui CLI if you've already adopted shadcn's workflow.
+
+This guide will walk you through the prerequisites and the installation steps for both methods, complete with example commands. By the end, you'll have specialized components ready to use in your project across various domains including AI interfaces, blockchain applications, and developer portfolios.
+
+## Prerequisites
+
+Before installing DeDevs UI Design Registry, make sure your environment meets the following requirements:
+
+- [Node.js](https://nodejs.org/en/download/), version 18 or later
+- A [React](https://reactjs.org/docs/getting-started.html) project, version 18 or later
+- [shadcn/ui](https://ui.shadcn.com/) installed in your project. In practice, this means you have already initialized shadcn in your project (for example by running `npx shadcn@latest init` and configuring Tailwind CSS). DeDevs UI Design Registry currently supports only the CSS Variables mode of shadcn/ui for theming.
+
+
+<Callout type="warning">
+Note: If you haven't installed `shadcn/ui` yet, you should do that first. Follow the official `shadcn/ui` setup instructions to configure Tailwind CSS and the base components. The Design Registry builds on that foundation, so having shadcn in place is required for all component types.
+</Callout>
+
+<Callout type="info">
+  DeDevs UI Design Registry currently only supports the CSS Variables version of shadcn/ui
+</Callout>
+
+## Installing Components
+
+You can install DeDevs UI Design Registry components using either the DeDevs UI CLI or the shadcn/ui CLI. Both achieve the same result: adding the selected component's code and any needed dependencies to your project. For example, to install a component, you would run:
+
+<Installer packageName="snippet" />
+
+The CLI will download the component's code and integrate it into your project's directory (usually under your components folder). By default, Design Registry components are added to the `@/components/ui/dedevs-ui/` directory (or whatever folder you've configured in your shadcn components settings).
+
+For instance, the command above will place the component files in `@/components/ui/dedevs-ui/snippet/`. The CLI also ensures that any required dependencies (for example, specific headless libraries a component might need) are installed automatically.
+
+## Component Categories
+
+The Design Registry includes specialized components across multiple domains:
+
+**AI Interface Components:**
+- **AI Response** - Renders AI-generated content with markdown support
+- **AI Input** - Enhanced input fields for AI conversations
+- **AI Reasoning** - Visualizes AI thought processes and decision-making
+
+**Blockchain/Web3 Components:**
+- **Wallet Connect** - Wallet connection and management interfaces
+- **Token Display** - Token balances and information displays
+- **Transaction History** - Transaction lists and status tracking
+
+**Developer Portfolio Components:**
+- **Project Showcase** - Interactive project galleries and case studies
+- **Code Snippet** - Syntax-highlighted code displays with copy functionality
+- **Skill Matrix** - Visual skill and technology displays
+
+**General Purpose Components:**
+- **Theme Switcher** - Dark/light mode toggle with system preference detection
+- **Interactive Elements** - Enhanced buttons, forms, and navigation components
+
+To install any of these components, use the same CLI command pattern:
+
+```bash
+npx dedevs-ui add <component-name>
+```
+
+<Callout type="info">
+⚡ Fast Installation: Both CLI methods are very fast – typically taking only a few seconds. You don't need to leave your editor or manually copy-paste any code. After the command finishes, everything is ready to go.
+</Callout>

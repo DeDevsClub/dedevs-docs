@@ -5,4 +5,115 @@ description: An overview of DeDevs Design
 
 # Design Overview
 
-Welcome to DeDevs Design documentation.
+import { Steps, Step } from '@/components/fumadocs/steps';
+import { Tabs, Tab } from '@/components/fumadocs/tabs';
+
+Welcome to the DeDevs UI Design Registry docs. This overview orients you across the core sections, shows how the registry relates to `shadcn/ui`, and gives you a quick path to start installing and using components.
+
+## What you'll find here
+
+- **Introduction** — High-level context, goals, and who this registry is for. See `Introduction` at [`/docs/design`](/docs/design).
+- **Philosophy** — Principles that guide component design: composability, simplicity, accessibility, performance, and DX. See [`/docs/design/philosophy`](/docs/design/philosophy).
+- **Setup** — Prerequisites and installation via the DeDevs UI CLI or shadcn/ui CLI. See [`/docs/design/setup`](/docs/design/setup).
+- **Usage** — Practical examples for AI interfaces, Blockchain/Web3 dashboards, and Developer portfolios. See [`/docs/design/usage`](/docs/design/usage).
+- **Component Registry** — Browse available components and install via CLI. See [`/docs/design/registry`](/docs/design/registry).
+- **Benefits** — Why use the registry across domains and teams. See [`/docs/design/benefits`](/docs/design/benefits).
+- **New Components** — Guidelines for proposing and contributing new specialized components. See [`/docs/design/new-components`](/docs/design/new-components).
+- **How to Contribute** — Issue/PR guidance and contribution areas. See [`/docs/design/how-to-contribute`](/docs/design/how-to-contribute).
+- **MCP Server** — Enable AI tooling to query the registry through MCP. See [`/docs/design/mcp`](/docs/design/mcp).
+- **Troubleshooting** — Common pitfalls and fixes. See [`/docs/design/troubleshooting`](/docs/design/troubleshooting).
+- **Resources** — Extra references and pointers. See [`/docs/design/resources/components`](/docs/design/resources/components).
+- **Concepts** — Foundational ideas and system-level context. See [`/docs/design/concepts/system`](/docs/design/concepts/system).
+
+## Quick start
+
+<Steps>
+  <Step>
+    <strong>Install prerequisites</strong>
+    <br />
+    Ensure a Next.js/React project with Tailwind and `shadcn/ui` (CSS Variables mode) is set up. See [`/docs/design/setup`](/docs/design/setup).
+  </Step>
+  <Step>
+    <strong>Add a component</strong>
+    <br />
+    Use the CLI to add your first component:
+
+```bash
+npx dedevs-ui add button
+```
+
+  </Step>
+  <Step>
+    <strong>Use it in your app</strong>
+    <br />
+    Import and compose the component within your UI. See domain-specific examples in [`/docs/design/usage`](/docs/design/usage).
+  </Step>
+  <Step>
+    <strong>Explore the registry</strong>
+    <br />
+    Browse available components and install more as needed. See [`/docs/design/registry`](/docs/design/registry).
+  </Step>
+</Steps>
+
+## Domains we focus on
+
+- **AI Interfaces** — Conversation UIs, reasoning visualization, streaming responses, source attribution.
+- **Blockchain/Web3** — Wallet connect, token balances, transaction histories, protocol interactions.
+- **Developer Portfolios** — Project showcases, code snippets, skill matrices, professional sections.
+
+These components are designed to be composable and accessible, using Tailwind CSS and aligning with `shadcn/ui` primitives.
+
+## Install components on demand
+
+Install any component from the registry. The CLI places code directly in your project so you retain full control and can theme with Tailwind utilities.
+
+```bash
+npx dedevs-ui add <component-name>
+```
+
+Install multiple at once:
+
+```bash
+npx dedevs-ui add button card dialog
+```
+
+## Featured components
+
+<Tabs items={["Basics", "Navigation", "Overlays"]} label="Browse">
+  <Tab>
+    <p className="mb-3">Core building blocks you’ll use in almost every page.</p>
+    <ul>
+      <li>- <a href="/components/button">Button</a> — Primary actions and variants.</li>
+      <li>- <a href="/components/input">Input</a> — Text inputs with consistent styling.</li>
+      <li>- <a href="/components/card">Card</a> — Content containers and groupings.</li>
+      <li>- <a href="/components/badge">Badge</a> — Inline status and metadata.</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <p className="mb-3">Navigate sections and surface structure in your UI.</p>
+    <ul>
+      <li>- <a href="/components/tabs">Tabs</a> — Organize related views.</li>
+      <li>- <a href="/components/breadcrumb">Breadcrumb</a> — Hierarchical navigation.</li>
+      <li>- <a href="/components/navigation-menu">Navigation Menu</a> — App-level menus.</li>
+      <li>- <a href="/components/pagination">Pagination</a> — Paginated collections.</li>
+    </ul>
+  </Tab>
+  <Tab>
+    <p className="mb-3">Transient layers for dialogs, menus, and hints.</p>
+    <ul>
+      <li>- <a href="/components/dialog">Dialog</a> — Modals for focused tasks.</li>
+      <li>- <a href="/components/dropdown-menu">Dropdown Menu</a> — Action menus.</li>
+      <li>- <a href="/components/tooltip">Tooltip</a> — Lightweight hints.</li>
+      <li>- <a href="/components/sheet">Sheet</a> — Slide-over panels.</li>
+    </ul>
+  </Tab>
+</Tabs>
+
+## Helpful next steps
+
+- **New here?** Start at [`/docs/design`](/docs/design) then read [`/docs/design/philosophy`](/docs/design/philosophy).
+- **Ready to build?** Jump to [`/docs/design/setup`](/docs/design/setup) and [`/docs/design/usage`](/docs/design/usage).
+- **Browsing components?** See [`/docs/design/registry`](/docs/design/registry).
+- **Integrating with AI tools?** Configure the MCP server via [`/docs/design/mcp`](/docs/design/mcp).
+- **Hit a snag?** Check [`/docs/design/troubleshooting`](/docs/design/troubleshooting).
+
