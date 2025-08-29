@@ -1,0 +1,537 @@
+---
+title: Migration
+description: Version upgrade guides and migration strategies for the DeDevs UI Design System.
+---
+
+# Migration
+
+This guide covers migration strategies when upgrading between versions of the DeDevs UI Design System, including breaking changes, component updates, and best practices for smooth transitions.
+
+## Version Migration Strategy
+
+### Semantic Versioning
+
+The DeDevs UI Design System follows semantic versioning:
+
+- **Major versions (1.0.0 → 2.0.0)** - Breaking changes that require code updates
+- **Minor versions (1.0.0 → 1.1.0)** - New features, backward compatible
+- **Patch versions (1.0.0 → 1.0.1)** - Bug fixes, backward compatible
+
+### Migration Planning
+
+Before upgrading:
+
+1. **Review the changelog** for breaking changes
+2. **Test in a development environment** first
+3. **Update dependencies** gradually
+4. **Run automated tests** to catch regressions
+5. **Update documentation** and team knowledge
+
+## Breaking Changes by Version
+
+### v2.0.0 Migration
+
+#### Component API Changes
+
+**Button Component**
+```tsx
+// v1.x (deprecated)
+<Button type="primary" size="large">
+  Click me
+</Button>
+
+// v2.x (new)
+<Button variant="default" size="lg">
+  Click me
+</Button>
+```
+
+**Dialog Component**
+```tsx
+// v1.x (deprecated)
+<Dialog isOpen={open} onClose={onClose}>
+  <DialogTitle>Title</DialogTitle>
+  <DialogContent>Content</DialogContent>
+</Dialog>
+
+// v2.x (new)
+<Dialog open={open} onOpenChange={onClose}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Title</DialogTitle>
+    </DialogHeader>
+    <div>Content</div>
+  </DialogContent>
+</Dialog>
+```
+
+#### Theme System Changes
+
+**CSS Variables**
+```css
+/* v1.x (deprecated) */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #64748b;
+}
+
+/* v2.x (new) */
+:root {
+  --primary: 217 91% 60%;
+  --secondary: 215 20% 65%;
+}
+```
+
+**Theme Provider**
+```tsx
+// v1.x (deprecated)
+<ThemeProvider theme="dark">
+  <App />
+</ThemeProvider>
+
+// v2.x (new)
+<ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+  <App />
+</ThemeProvider>
+```
+
+### v1.5.0 Migration
+
+#### Form Components
+
+**Input Component**
+```tsx
+// v1.4.x (deprecated)
+<Input error="Invalid input" />
+
+// v1.5.x (new)
+<Input aria-invalid="true" aria-describedby="error-message" />
+<div id="error-message">Invalid input</div>
+```
+
+#### Accessibility Improvements
+
+**Focus Management**
+```tsx
+// v1.4.x (manual focus management)
+useEffect(() => {
+  if (isOpen) {
+    dialogRef.current?.focus()
+  }
+}, [isOpen])
+
+// v1.5.x (automatic focus management)
+<Dialog open={isOpen}>
+  <DialogContent> {/* Focus managed automatically */}
+    Content
+  </DialogContent>
+</Dialog>
+```
+
+## Automated Migration Tools
+
+### Codemod Scripts
+
+Use automated codemods to handle repetitive migrations:
+
+```bash
+# Install the migration tool
+npm install -g @dedevs-ui/codemod
+
+# Run migration for v2.0.0
+npx @dedevs-ui/codemod v2.0.0 src/
+
+# Run specific transformations
+npx @dedevs-ui/codemod button-props src/components/
+```
+
+### Custom Migration Script
+
+```javascript
+// scripts/migrate-v2.js
+const fs = require('fs')
+const path = require('path')
+
+function migrateButtonProps(content) {
+  return content
+    .replace(/type="primary"/g, 'variant="default"')
+    .replace(/type="secondary"/g, 'variant="secondary"')
+    .replace(/size="large"/g, 'size="lg"')
+    .replace(/size="small"/g, 'size="sm"')
+}
+
+function migrateFile(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8')
+  const migrated = migrateButtonProps(content)
+  
+  if (content !== migrated) {
+    fs.writeFileSync(filePath, migrated)
+    console.log(`Migrated: ${filePath}`)
+  }
+}
+
+// Usage
+const srcDir = './src'
+// Process all .tsx files recursively
+```
+
+## Component-Specific Migrations
+
+### Form Components Migration
+
+#### Input Component
+```tsx
+// Before v2.0.0
+interface InputProps {
+  error?: string
+  success?: boolean
+  warning?: boolean
+}
+
+// After v2.0.0
+interface InputProps {
+  'aria-invalid'?: boolean
+  'aria-describedby'?: string
+}
+
+// Migration helper
+function migrateInputProps(oldProps: OldInputProps): NewInputProps {
+  const newProps: NewInputProps = { ...oldProps }
+  
+  if (oldProps.error) {
+    newProps['aria-invalid'] = true
+    newProps['aria-describedby'] = 'error-message'
+  }
+  
+  delete newProps.error
+  delete newProps.success
+  delete newProps.warning
+  
+  return newProps
+}
+```
+
+#### Select Component
+```tsx
+// Before v2.0.0
+<Select
+  options={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' }
+  ]}
+  onChange={(value) => setValue(value)}
+/>
+
+// After v2.0.0
+<Select value={value} onValueChange={setValue}>
+  <SelectTrigger>
+    <SelectValue placeholder="Select option..." />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="1">Option 1</SelectItem>
+    <SelectItem value="2">Option 2</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+### Layout Components Migration
+
+#### Grid System
+```tsx
+// Before v2.0.0
+<Grid container spacing={2}>
+  <Grid item xs={12} md={6}>
+    Content
+  </Grid>
+</Grid>
+
+// After v2.0.0
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div>Content</div>
+</div>
+```
+
+## Domain-Specific Migrations
+
+### AI Interface Components
+
+#### Message Component
+```tsx
+// Before v2.0.0
+<AIMessage
+  type="user"
+  content="Hello"
+  timestamp={new Date()}
+/>
+
+// After v2.0.0
+<AIMessage
+  role="user"
+  timestamp={new Date()}
+>
+  Hello
+</AIMessage>
+```
+
+#### Streaming Component
+```tsx
+// Before v2.0.0
+<StreamingText
+  text={streamingText}
+  isComplete={isComplete}
+  speed={50}
+/>
+
+// After v2.0.0
+<StreamingMessage
+  content={streamingText}
+  isComplete={isComplete}
+  typingSpeed={50}
+/>
+```
+
+### Web3 Components
+
+#### Wallet Connection
+```tsx
+// Before v2.0.0
+<WalletConnector
+  providers={['metamask', 'walletconnect']}
+  onConnect={handleConnect}
+  onDisconnect={handleDisconnect}
+/>
+
+// After v2.0.0
+<WalletConnect>
+  <WalletConnectModal
+    providers={[
+      { name: 'MetaMask', connector: 'metamask' },
+      { name: 'WalletConnect', connector: 'walletconnect' }
+    ]}
+    onConnect={handleConnect}
+    onDisconnect={handleDisconnect}
+  />
+</WalletConnect>
+```
+
+### Portfolio Components
+
+#### Project Card
+```tsx
+// Before v2.0.0
+<ProjectCard
+  project={project}
+  showTags={true}
+  showLinks={true}
+  onClick={handleClick}
+/>
+
+// After v2.0.0
+<ProjectCard
+  project={project}
+  variant="detailed" // includes tags and links
+  onClick={handleClick}
+/>
+```
+
+## Testing Migration
+
+### Update Test Suites
+
+```tsx
+// Before v2.0.0
+describe('Button', () => {
+  it('renders primary button', () => {
+    render(<Button type="primary">Click me</Button>)
+    expect(screen.getByRole('button')).toHaveClass('btn-primary')
+  })
+})
+
+// After v2.0.0
+describe('Button', () => {
+  it('renders default variant button', () => {
+    render(<Button variant="default">Click me</Button>)
+    expect(screen.getByRole('button')).toHaveClass('bg-primary')
+  })
+})
+```
+
+### Accessibility Test Updates
+
+```tsx
+// Before v2.0.0
+it('shows error state', () => {
+  render(<Input error="Invalid input" />)
+  expect(screen.getByText('Invalid input')).toBeInTheDocument()
+})
+
+// After v2.0.0
+it('shows error state', () => {
+  render(
+    <div>
+      <Input aria-invalid="true" aria-describedby="error" />
+      <div id="error">Invalid input</div>
+    </div>
+  )
+  
+  const input = screen.getByRole('textbox')
+  expect(input).toHaveAttribute('aria-invalid', 'true')
+  expect(input).toHaveAttribute('aria-describedby', 'error')
+})
+```
+
+## Gradual Migration Strategy
+
+### Phase 1: Preparation
+1. **Audit current usage** of components
+2. **Identify breaking changes** that affect your codebase
+3. **Set up migration environment** with new version
+4. **Create migration checklist** for your team
+
+### Phase 2: Core Components
+1. **Migrate foundational components** (Button, Input, Card)
+2. **Update theme configuration**
+3. **Test basic functionality**
+4. **Update component tests**
+
+### Phase 3: Complex Components
+1. **Migrate form components** and validation
+2. **Update navigation components**
+3. **Migrate data display components**
+4. **Test integration scenarios**
+
+### Phase 4: Domain-Specific
+1. **Migrate AI interface components**
+2. **Update Web3 components**
+3. **Migrate portfolio components**
+4. **Test domain-specific workflows**
+
+### Phase 5: Finalization
+1. **Remove deprecated code**
+2. **Update documentation**
+3. **Train team on new patterns**
+4. **Monitor for issues**
+
+## Rollback Strategy
+
+### Version Pinning
+```json
+// package.json - Pin to specific version during migration
+{
+  "dependencies": {
+    "@dedevs-ui/core": "1.9.0", // Pin old version
+    "@dedevs-ui/icons": "1.9.0"
+  }
+}
+```
+
+### Feature Flags
+```tsx
+// Use feature flags for gradual rollout
+const useNewButton = useFeatureFlag('new-button-component')
+
+export function MyComponent() {
+  return (
+    <div>
+      {useNewButton ? (
+        <Button variant="default">New Button</Button>
+      ) : (
+        <LegacyButton type="primary">Old Button</LegacyButton>
+      )}
+    </div>
+  )
+}
+```
+
+### Parallel Implementation
+```tsx
+// Run old and new components side by side
+export function TransitionWrapper({ children, useNewComponent = false }) {
+  if (useNewComponent) {
+    return <NewComponentProvider>{children}</NewComponentProvider>
+  }
+  
+  return <LegacyComponentProvider>{children}</LegacyComponentProvider>
+}
+```
+
+## Common Migration Issues
+
+### CSS Conflicts
+```css
+/* Namespace old styles during transition */
+.legacy-components {
+  .btn-primary {
+    background-color: #3b82f6;
+  }
+}
+
+.new-components {
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+}
+```
+
+### Type Conflicts
+```tsx
+// Create type adapters for gradual migration
+type LegacyButtonProps = {
+  type: 'primary' | 'secondary'
+  size: 'small' | 'large'
+}
+
+type NewButtonProps = {
+  variant: 'default' | 'secondary'
+  size: 'sm' | 'lg'
+}
+
+function adaptButtonProps(legacy: LegacyButtonProps): NewButtonProps {
+  return {
+    variant: legacy.type === 'primary' ? 'default' : 'secondary',
+    size: legacy.size === 'small' ? 'sm' : 'lg'
+  }
+}
+```
+
+### Bundle Size Issues
+```javascript
+// webpack.config.js - Exclude old components from bundle
+module.exports = {
+  resolve: {
+    alias: {
+      '@dedevs-ui/legacy': false, // Exclude legacy components
+    }
+  }
+}
+```
+
+## Post-Migration Checklist
+
+### Code Quality
+- [ ] Remove all deprecated imports
+- [ ] Update TypeScript types
+- [ ] Fix linting errors
+- [ ] Update component documentation
+
+### Testing
+- [ ] All tests passing
+- [ ] Accessibility tests updated
+- [ ] Visual regression tests passing
+- [ ] Performance benchmarks maintained
+
+### Documentation
+- [ ] Update component examples
+- [ ] Update API documentation
+- [ ] Update migration guides
+- [ ] Team training completed
+
+### Monitoring
+- [ ] Error tracking configured
+- [ ] Performance monitoring active
+- [ ] User feedback collection setup
+- [ ] Rollback plan documented
+
+This comprehensive migration guide ensures smooth transitions between versions while maintaining code quality and user experience.
+
+# Migration

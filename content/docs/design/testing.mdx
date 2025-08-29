@@ -1,0 +1,524 @@
+---
+title: Testing
+description: Comprehensive testing strategies for DeDevs UI components including accessibility, visual regression, and interaction testing.
+---
+
+# Testing
+
+Testing is crucial for maintaining the quality and reliability of the DeDevs UI Design System. This guide covers comprehensive testing strategies including unit tests, accessibility testing, visual regression testing, and interaction testing.
+
+## Testing Philosophy
+
+### Test Pyramid
+- **Unit Tests** - Test individual component logic and props
+- **Integration Tests** - Test component interactions and composition
+- **Visual Tests** - Ensure visual consistency across changes
+- **Accessibility Tests** - Verify WCAG compliance and screen reader support
+- **End-to-End Tests** - Test complete user workflows
+
+## Unit Testing
+
+### Component Testing Setup
+
+```bash
+# Install testing dependencies
+npm install --save-dev @testing-library/react @testing-library/jest-dom jest-environment-jsdom
+```
+
+### Basic Component Test
+
+```tsx
+// components/ui/button.test.tsx
+import { render, screen, fireEvent } from '@testing-library/react'
+import { Button } from './button'
+
+describe('Button', () => {
+  it('renders with correct text', () => {
+    render(<Button>Click me</Button>)
+    expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument()
+  })
+
+  it('handles click events', () => {
+    const handleClick = jest.fn()
+    render(<Button onClick={handleClick}>Click me</Button>)
+    
+    fireEvent.click(screen.getByRole('button'))
+    expect(handleClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('applies variant styles correctly', () => {
+    render(<Button variant="destructive">Delete</Button>)
+    const button = screen.getByRole('button')
+    expect(button).toHaveClass('bg-destructive')
+  })
+
+  it('is disabled when disabled prop is true', () => {
+    render(<Button disabled>Disabled</Button>)
+    expect(screen.getByRole('button')).toBeDisabled()
+  })
+})
+```
+
+### Testing Custom Hooks
+
+```tsx
+// hooks/use-theme.test.ts
+import { renderHook, act } from '@testing-library/react'
+import { useTheme } from './use-theme'
+
+describe('useTheme', () => {
+  it('initializes with system theme', () => {
+    const { result } = renderHook(() => useTheme())
+    expect(result.current.theme).toBe('system')
+  })
+
+  it('changes theme when setTheme is called', () => {
+    const { result } = renderHook(() => useTheme())
+    
+    act(() => {
+      result.current.setTheme('dark')
+    })
+    
+    expect(result.current.theme).toBe('dark')
+  })
+})
+```
+
+## Accessibility Testing
+
+### Automated Accessibility Testing
+
+```tsx
+// components/ui/dialog.test.tsx
+import { render } from '@testing-library/react'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog'
+
+expect.extend(toHaveNoViolations)
+
+describe('Dialog Accessibility', () => {
+  it('has no accessibility violations', async () => {
+    const { container } = render(
+      <Dialog open>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Test Dialog</DialogTitle>
+          </DialogHeader>
+          <p>Dialog content</p>
+        </DialogContent>
+      </Dialog>
+    )
+
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('traps focus within dialog', () => {
+    render(
+      <Dialog open>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Test Dialog</DialogTitle>
+          </DialogHeader>
+          <button>First button</button>
+          <button>Second button</button>
+        </DialogContent>
+      </Dialog>
+    )
+
+    // Test focus trapping logic
+    const firstButton = screen.getByText('First button')
+    const secondButton = screen.getByText('Second button')
+    
+    firstButton.focus()
+    expect(document.activeElement).toBe(firstButton)
+    
+    // Tab should move to second button
+    fireEvent.keyDown(document, { key: 'Tab' })
+    expect(document.activeElement).toBe(secondButton)
+  })
+})
+```
+
+### Screen Reader Testing
+
+```tsx
+// Test screen reader announcements
+describe('Screen Reader Support', () => {
+  it('announces status changes', () => {
+    const { rerender } = render(<StatusMessage status="loading" />)
+    
+    // Check for live region
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    
+    rerender(<StatusMessage status="success" />)
+    expect(screen.getByText('Operation completed successfully')).toBeInTheDocument()
+  })
+
+  it('provides proper labels for form fields', () => {
+    render(
+      <div>
+        <label htmlFor="email">Email Address</label>
+        <input id="email" type="email" aria-describedby="email-help" />
+        <div id="email-help">We'll never share your email</div>
+      </div>
+    )
+
+    const input = screen.getByLabelText('Email Address')
+    expect(input).toHaveAttribute('aria-describedby', 'email-help')
+  })
+})
+```
+
+## Visual Regression Testing
+
+### Chromatic Setup
+
+```bash
+# Install Chromatic
+npm install --save-dev chromatic
+
+# Add to package.json scripts
+{
+  "scripts": {
+    "chromatic": "chromatic --exit-zero-on-changes"
+  }
+}
+```
+
+### Storybook Stories for Visual Testing
+
+```tsx
+// components/ui/button.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react'
+import { Button } from './button'
+
+const meta: Meta<typeof Button> = {
+  title: 'UI/Button',
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+}
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    children: 'Button',
+  },
+}
+
+export const Variants: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <Button variant="default">Default</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="destructive">Destructive</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  ),
+}
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex items-center gap-2">
+      <Button size="sm">Small</Button>
+      <Button size="default">Default</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  ),
+}
+
+export const States: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <Button>Normal</Button>
+      <Button disabled>Disabled</Button>
+      <Button className="hover:bg-primary/90">Hover</Button>
+    </div>
+  ),
+}
+```
+
+## Integration Testing
+
+### Component Composition Testing
+
+```tsx
+// Test complex component interactions
+describe('Form Integration', () => {
+  it('validates and submits form correctly', async () => {
+    const handleSubmit = jest.fn()
+    
+    render(
+      <form onSubmit={handleSubmit}>
+        <div>
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" required />
+        </div>
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" required />
+        </div>
+        <Button type="submit">Submit</Button>
+      </form>
+    )
+
+    // Fill out form
+    await user.type(screen.getByLabelText('Name'), 'John Doe')
+    await user.type(screen.getByLabelText('Email'), 'john@example.com')
+    
+    // Submit form
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
+    
+    expect(handleSubmit).toHaveBeenCalled()
+  })
+})
+```
+
+### Context Provider Testing
+
+```tsx
+// Test theme context integration
+describe('Theme Integration', () => {
+  it('applies theme changes across components', () => {
+    render(
+      <ThemeProvider>
+        <div>
+          <Button>Themed Button</Button>
+          <ThemeToggle />
+        </div>
+      </ThemeProvider>
+    )
+
+    // Toggle to dark theme
+    fireEvent.click(screen.getByRole('button', { name: /toggle theme/i }))
+    
+    // Check if theme is applied
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+  })
+})
+```
+
+## Domain-Specific Testing
+
+### AI Interface Testing
+
+```tsx
+// Test streaming message component
+describe('AIMessage', () => {
+  it('displays streaming content correctly', async () => {
+    const streamingContent = 'Hello, this is a streaming response...'
+    
+    render(
+      <AIMessage 
+        role="assistant" 
+        content={streamingContent}
+        isStreaming={true}
+      />
+    )
+
+    // Should show typing indicator
+    expect(screen.getByTestId('typing-indicator')).toBeInTheDocument()
+    
+    // Content should appear gradually
+    await waitFor(() => {
+      expect(screen.getByText(/Hello/)).toBeInTheDocument()
+    })
+  })
+
+  it('handles source attribution', () => {
+    const sources = [
+      { id: '1', title: 'Source 1', url: 'https://example.com' }
+    ]
+    
+    render(
+      <AIMessage 
+        role="assistant" 
+        content="Response with sources"
+        sources={sources}
+      />
+    )
+
+    expect(screen.getByText('Source 1')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Source 1' })).toHaveAttribute('href', 'https://example.com')
+  })
+})
+```
+
+### Web3 Component Testing
+
+```tsx
+// Test wallet connection component
+describe('WalletConnect', () => {
+  it('handles wallet connection flow', async () => {
+    const mockConnect = jest.fn()
+    
+    render(
+      <WalletConnect onConnect={mockConnect}>
+        <WalletButton>Connect Wallet</WalletButton>
+      </WalletConnect>
+    )
+
+    await user.click(screen.getByText('Connect Wallet'))
+    expect(mockConnect).toHaveBeenCalled()
+  })
+
+  it('displays connection status', () => {
+    render(
+      <WalletStatus 
+        address="0x1234...5678"
+        isConnected={true}
+        network="Ethereum"
+      />
+    )
+
+    expect(screen.getByText('0x1234...5678')).toBeInTheDocument()
+    expect(screen.getByText('Ethereum')).toBeInTheDocument()
+  })
+})
+```
+
+## Performance Testing
+
+### Component Performance
+
+```tsx
+// Test component rendering performance
+describe('Performance', () => {
+  it('renders large lists efficiently', () => {
+    const items = Array.from({ length: 1000 }, (_, i) => ({
+      id: i,
+      title: `Item ${i}`,
+    }))
+
+    const startTime = performance.now()
+    
+    render(
+      <VirtualizedList items={items}>
+        {(item) => <div key={item.id}>{item.title}</div>}
+      </VirtualizedList>
+    )
+    
+    const endTime = performance.now()
+    const renderTime = endTime - startTime
+    
+    // Should render in under 100ms
+    expect(renderTime).toBeLessThan(100)
+  })
+})
+```
+
+## Test Utilities
+
+### Custom Render Function
+
+```tsx
+// test-utils.tsx
+import { render as rtlRender } from '@testing-library/react'
+import { ThemeProvider } from '@/contexts/theme-provider'
+
+function render(ui: React.ReactElement, options = {}) {
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    )
+  }
+
+  return rtlRender(ui, { wrapper: Wrapper, ...options })
+}
+
+// Re-export everything
+export * from '@testing-library/react'
+export { render }
+```
+
+### Mock Utilities
+
+```tsx
+// mocks/intersection-observer.ts
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
+
+// mocks/resize-observer.ts
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
+```
+
+## CI/CD Integration
+
+### GitHub Actions Workflow
+
+```yaml
+# .github/workflows/test.yml
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test -- --coverage
+      
+      - name: Run accessibility tests
+        run: npm run test:a11y
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+```
+
+## Best Practices
+
+### Test Organization
+- Group related tests in describe blocks
+- Use descriptive test names that explain the expected behavior
+- Follow the AAA pattern: Arrange, Act, Assert
+- Keep tests focused on a single behavior
+
+### Accessibility Testing
+- Test with keyboard navigation
+- Verify screen reader announcements
+- Check color contrast programmatically
+- Test with different viewport sizes
+
+### Performance Considerations
+- Mock heavy dependencies in unit tests
+- Use shallow rendering when appropriate
+- Test performance-critical components separately
+- Monitor bundle size impact of test utilities
+
+### Maintenance
+- Keep tests up to date with component changes
+- Remove obsolete tests when refactoring
+- Use shared test utilities to reduce duplication
+- Document complex test scenarios
+
+This comprehensive testing strategy ensures the DeDevs UI Design System maintains high quality, accessibility, and performance standards across all components and domains.
+
+# Testing

@@ -1,0 +1,600 @@
+---
+title: Performance
+description: Performance optimization strategies for DeDevs UI components including bundle size, rendering performance, and runtime optimization.
+---
+
+# Performance
+
+Performance is critical for delivering exceptional user experiences. This guide covers optimization strategies for the DeDevs UI Design System, including bundle size management, rendering performance, and runtime optimization techniques.
+
+## Bundle Size Optimization
+
+### Tree Shaking
+
+Components are designed to be tree-shakable, allowing bundlers to eliminate unused code:
+
+```tsx
+// ✅ Good - Import only what you need
+import { Button } from '@/components/ui/button'
+import { Dialog } from '@/components/ui/dialog'
+
+// ❌ Avoid - Imports entire library
+import * as UI from '@/components/ui'
+```
+
+### Component Splitting
+
+Split large components into smaller, focused pieces:
+
+```tsx
+// ✅ Split complex components
+const DataTable = lazy(() => import('./data-table'))
+const DataTableFilters = lazy(() => import('./data-table-filters'))
+const DataTablePagination = lazy(() => import('./data-table-pagination'))
+
+// Usage with Suspense
+<Suspense fallback={<DataTableSkeleton />}>
+  <DataTable data={data} />
+</Suspense>
+```
+
+### Bundle Analysis
+
+Monitor bundle size with webpack-bundle-analyzer:
+
+```bash
+# Install analyzer
+npm install --save-dev webpack-bundle-analyzer
+
+# Add to package.json
+{
+  "scripts": {
+    "analyze": "npm run build && npx webpack-bundle-analyzer .next/static/chunks/*.js"
+  }
+}
+```
+
+## Rendering Performance
+
+### React.memo for Component Optimization
+
+Prevent unnecessary re-renders with React.memo:
+
+```tsx
+// Optimize expensive components
+export const ExpensiveComponent = React.memo(({ data, onAction }: Props) => {
+  return (
+    <div>
+      {data.map(item => (
+        <ComplexItem key={item.id} item={item} onAction={onAction} />
+      ))}
+    </div>
+  )
+})
+
+// Custom comparison for complex props
+export const OptimizedCard = React.memo(({ project }: { project: Project }) => {
+  return <ProjectCard project={project} />
+}, (prevProps, nextProps) => {
+  return prevProps.project.id === nextProps.project.id &&
+         prevProps.project.updatedAt === nextProps.project.updatedAt
+})
+```
+
+### useMemo and useCallback
+
+Optimize expensive calculations and function references:
+
+```tsx
+export function DataVisualization({ data, filters }: Props) {
+  // Memoize expensive calculations
+  const processedData = useMemo(() => {
+    return data
+      .filter(item => filters.includes(item.category))
+      .map(item => ({
+        ...item,
+        value: calculateComplexValue(item)
+      }))
+  }, [data, filters])
+
+  // Memoize callback functions
+  const handleItemClick = useCallback((itemId: string) => {
+    onItemSelect(itemId)
+    trackAnalytics('item_clicked', { itemId })
+  }, [onItemSelect])
+
+  return (
+    <Chart 
+      data={processedData} 
+      onItemClick={handleItemClick}
+    />
+  )
+}
+```
+
+### Virtual Scrolling
+
+Handle large datasets efficiently:
+
+```tsx
+import { FixedSizeList as List } from 'react-window'
+
+export function VirtualizedMessageList({ messages }: { messages: Message[] }) {
+  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => (
+    <div style={style}>
+      <MessageItem message={messages[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={messages.length}
+      itemSize={80}
+      className="scrollbar-thin"
+    >
+      {Row}
+    </List>
+  )
+}
+```
+
+## Image Optimization
+
+### Next.js Image Component
+
+Use optimized images with automatic format selection:
+
+```tsx
+import Image from 'next/image'
+
+export function ProjectCard({ project }: { project: Project }) {
+  return (
+    <Card>
+      <div className="aspect-video relative">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className="object-cover rounded-t-lg"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={project.featured} // Load featured images first
+        />
+      </div>
+      <CardContent>
+        <h3>{project.title}</h3>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+### Progressive Image Loading
+
+Implement progressive loading for better perceived performance:
+
+```tsx
+export function ProgressiveImage({ 
+  src, 
+  placeholder, 
+  alt,
+  className 
+}: ProgressiveImageProps) {
+  const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState(false)
+
+  return (
+    <div className={cn("relative overflow-hidden", className)}>
+      {/* Low-quality placeholder */}
+      <img
+        src={placeholder}
+        alt=""
+        className={cn(
+          "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+          loaded && "opacity-0"
+        )}
+      />
+      
+      {/* High-quality image */}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+        className={cn(
+          "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+          loaded ? "opacity-100" : "opacity-0"
+        )}
+      />
+      
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted">
+          <ImageIcon className="h-8 w-8 text-muted-foreground" />
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+## Code Splitting Strategies
+
+### Route-Based Splitting
+
+Split code at the route level:
+
+```tsx
+// pages/dashboard.tsx
+import { lazy, Suspense } from 'react'
+
+const ProjectsTab = lazy(() => import('@/components/dashboard/projects-tab'))
+const AnalyticsTab = lazy(() => import('@/components/dashboard/analytics-tab'))
+const SettingsTab = lazy(() => import('@/components/dashboard/settings-tab'))
+
+export function Dashboard() {
+  const [activeTab, setActiveTab] = useState('projects')
+
+  return (
+    <div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        
+        <Suspense fallback={<TabContentSkeleton />}>
+          <TabsContent value="projects">
+            <ProjectsTab />
+          </TabsContent>
+          <TabsContent value="analytics">
+            <AnalyticsTab />
+          </TabsContent>
+          <TabsContent value="settings">
+            <SettingsTab />
+          </TabsContent>
+        </Suspense>
+      </Tabs>
+    </div>
+  )
+}
+```
+
+### Component-Based Splitting
+
+Split heavy components:
+
+```tsx
+// Lazy load heavy chart components
+const ChartComponent = lazy(() => import('recharts').then(module => ({
+  default: module.LineChart
+})))
+
+export function DataDashboard({ data }: { data: ChartData[] }) {
+  const [showChart, setShowChart] = useState(false)
+
+  return (
+    <div>
+      <div className="mb-4">
+        <Button onClick={() => setShowChart(true)}>
+          Show Detailed Chart
+        </Button>
+      </div>
+      
+      {showChart && (
+        <Suspense fallback={<ChartSkeleton />}>
+          <ChartComponent data={data} />
+        </Suspense>
+      )}
+    </div>
+  )
+}
+```
+
+## Runtime Performance
+
+### Debouncing and Throttling
+
+Optimize frequent operations:
+
+```tsx
+import { useDebouncedCallback } from 'use-debounce'
+
+export function SearchInput({ onSearch }: { onSearch: (query: string) => void }) {
+  const [query, setQuery] = useState('')
+  
+  // Debounce search requests
+  const debouncedSearch = useDebouncedCallback(
+    (value: string) => {
+      onSearch(value)
+    },
+    300
+  )
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setQuery(value)
+    debouncedSearch(value)
+  }
+
+  return (
+    <Input
+      value={query}
+      onChange={handleChange}
+      placeholder="Search..."
+    />
+  )
+}
+```
+
+### Intersection Observer for Lazy Loading
+
+Load content when it becomes visible:
+
+```tsx
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
+
+export function LazySection({ children }: { children: React.ReactNode }) {
+  const [ref, isIntersecting] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '50px'
+  })
+
+  return (
+    <div ref={ref}>
+      {isIntersecting ? children : <SectionSkeleton />}
+    </div>
+  )
+}
+```
+
+## Domain-Specific Optimizations
+
+### AI Interface Performance
+
+Optimize streaming and real-time updates:
+
+```tsx
+export function StreamingMessage({ content, isComplete }: StreamingMessageProps) {
+  const [displayedContent, setDisplayedContent] = useState('')
+  
+  // Throttle updates to avoid excessive re-renders
+  const throttledUpdate = useCallback(
+    throttle((newContent: string) => {
+      setDisplayedContent(newContent)
+    }, 50),
+    []
+  )
+
+  useEffect(() => {
+    if (content && !isComplete) {
+      throttledUpdate(content)
+    } else if (isComplete) {
+      setDisplayedContent(content)
+    }
+  }, [content, isComplete, throttledUpdate])
+
+  return (
+    <div className="message">
+      <ReactMarkdown>{displayedContent}</ReactMarkdown>
+      {!isComplete && <TypingIndicator />}
+    </div>
+  )
+}
+```
+
+### Web3 Performance
+
+Optimize blockchain interactions:
+
+```tsx
+export function TokenBalance({ address }: { address: string }) {
+  // Cache balance data
+  const { data: balance, isLoading } = useQuery({
+    queryKey: ['balance', address],
+    queryFn: () => fetchTokenBalance(address),
+    staleTime: 30000, // Cache for 30 seconds
+    refetchInterval: 60000, // Refetch every minute
+  })
+
+  // Batch multiple token requests
+  const { data: tokens } = useQuery({
+    queryKey: ['tokens', address],
+    queryFn: () => batchFetchTokens([
+      'USDC', 'USDT', 'DAI', 'WETH'
+    ], address),
+    staleTime: 60000,
+  })
+
+  if (isLoading) return <BalanceSkeleton />
+
+  return (
+    <div>
+      <div className="text-2xl font-bold">
+        {formatCurrency(balance)}
+      </div>
+      <TokenList tokens={tokens} />
+    </div>
+  )
+}
+```
+
+### Portfolio Performance
+
+Optimize project galleries and media:
+
+```tsx
+export function ProjectGallery({ projects }: { projects: Project[] }) {
+  // Implement pagination for large project lists
+  const [page, setPage] = useState(1)
+  const itemsPerPage = 12
+  
+  const paginatedProjects = useMemo(() => {
+    const start = (page - 1) * itemsPerPage
+    return projects.slice(start, start + itemsPerPage)
+  }, [projects, page])
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {paginatedProjects.map((project) => (
+          <LazyProjectCard key={project.id} project={project} />
+        ))}
+      </div>
+      
+      <Pagination
+        currentPage={page}
+        totalPages={Math.ceil(projects.length / itemsPerPage)}
+        onPageChange={setPage}
+      />
+    </div>
+  )
+}
+```
+
+## Performance Monitoring
+
+### Core Web Vitals
+
+Monitor key performance metrics:
+
+```tsx
+// lib/performance.ts
+export function reportWebVitals(metric: any) {
+  switch (metric.name) {
+    case 'FCP':
+      // First Contentful Paint
+      console.log('FCP:', metric.value)
+      break
+    case 'LCP':
+      // Largest Contentful Paint
+      console.log('LCP:', metric.value)
+      break
+    case 'CLS':
+      // Cumulative Layout Shift
+      console.log('CLS:', metric.value)
+      break
+    case 'FID':
+      // First Input Delay
+      console.log('FID:', metric.value)
+      break
+  }
+  
+  // Send to analytics
+  analytics.track('web_vital', {
+    name: metric.name,
+    value: metric.value,
+    id: metric.id,
+  })
+}
+```
+
+### Performance Profiling
+
+Use React DevTools Profiler:
+
+```tsx
+import { Profiler } from 'react'
+
+function onRenderCallback(
+  id: string,
+  phase: 'mount' | 'update',
+  actualDuration: number,
+  baseDuration: number,
+  startTime: number,
+  commitTime: number
+) {
+  console.log('Component:', id)
+  console.log('Phase:', phase)
+  console.log('Actual duration:', actualDuration)
+  console.log('Base duration:', baseDuration)
+}
+
+export function App() {
+  return (
+    <Profiler id="App" onRender={onRenderCallback}>
+      <Dashboard />
+    </Profiler>
+  )
+}
+```
+
+## Build Optimization
+
+### Webpack Configuration
+
+Optimize build performance:
+
+```javascript
+// next.config.js
+module.exports = {
+  webpack: (config, { dev, isServer }) => {
+    // Enable SWC minification
+    config.swcMinify = true
+    
+    // Optimize chunks
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      }
+    }
+    
+    return config
+  },
+  
+  // Enable experimental features
+  experimental: {
+    optimizeCss: true,
+    swcTraceProfiling: true,
+  },
+  
+  // Compress images
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+  },
+}
+```
+
+## Best Practices
+
+### Component Design
+- Keep components small and focused
+- Use composition over inheritance
+- Implement proper prop drilling alternatives
+- Avoid inline object/function creation in render
+
+### State Management
+- Use local state when possible
+- Implement proper state normalization
+- Avoid unnecessary global state
+- Use state machines for complex state logic
+
+### Network Optimization
+- Implement proper caching strategies
+- Use request deduplication
+- Batch API requests when possible
+- Implement offline-first patterns
+
+### Memory Management
+- Clean up event listeners and subscriptions
+- Avoid memory leaks in useEffect
+- Use WeakMap/WeakSet for object references
+- Implement proper component unmounting
+
+These performance optimization strategies ensure the DeDevs UI Design System delivers fast, responsive user experiences across all application domains.
+
+# Performance
